@@ -1,0 +1,9 @@
+﻿@using MudBlazor
+
+@inject IApplicationState AppState
+
+<MudLink Target="_top" Href="@AppState.HomeUrl" Underline="Underline.None" style="color:#f8f9fa;">
+	<MudText Typo="Typo.h4" style="color:#f8f9fa;">
+		<strong>@AppState.ApplicationTitle</strong>
+	</MudText>
+</MudLink>
