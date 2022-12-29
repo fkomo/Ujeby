@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ujeby.Api.Client.Base", "Uj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ujeby.Blazor.Base", "Ujeby.Blazor.Base\Ujeby.Blazor.Base.csproj", "{AB49E130-A14B-49E1-89E8-E16D1F9F3F84}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deploy", "Deploy", "{0FC7FBE6-80FF-4078-AEC3-C2025F3B751C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ujeby.Common", "Ujeby.Common\Ujeby.Common.csproj", "{D7E20ECA-34BD-4F91-86EF-90012D53476F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ujeby.Test", "Ujeby.Test\Ujeby.Test.csproj", "{7971D7F8-C0F3-4B7E-ABC8-5EDCB25C2147}"
