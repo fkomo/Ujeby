@@ -193,6 +193,26 @@ namespace Ujeby.Tools
 
 			return inputString.Remove(startIndex, endIndex - startIndex + substringTo.Length);
 		}
+
+		/// <summary>
+		/// split pascal/camel case string with
+		/// </summary>
+		/// <param name="s"></param>
+		/// <param name="delimiter"></param>
+		/// <returns></returns>
+		public static string SplitCase(string s, char delimiter = ' ')
+		{
+			var result = string.Empty;
+
+			for (var i = 0; i < s.Length; i++)
+			{
+				result += s[i];
+				if (i < s.Length - 1 && char.IsLower(s[i]) && char.IsUpper(s[i + 1]))
+					result += delimiter;
+			}
+
+			return result;
+		}
 	}
 
 }

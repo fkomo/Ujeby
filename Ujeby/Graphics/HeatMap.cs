@@ -6,7 +6,7 @@ namespace Ujeby.Graphics
 	{
 		private static readonly v4f[] _colors = new[]
 		{
-			new v4f(0, 0, 0, 1),
+			//new v4f(0, 0, 0, 1),
 
 			new v4f(0, 0, 1, 1),
 			new v4f(0, 1, 1, 1),
@@ -14,7 +14,7 @@ namespace Ujeby.Graphics
 			new v4f(1, 1, 0, 1),
 			new v4f(1, 0, 0, 1),
 
-			new v4f(1, 1, 1, 1),
+			//new v4f(1, 1, 1, 1),
 		};
 
 		public static v4f GetColorForValue(double value, double maxValue, 
