@@ -9,6 +9,7 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Authors>fkomo</Authors>
 		<Company>Ujeby</Company>
+		<Version>1.2.0</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
