@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Ujeby.Api.Base\Ujeby.Api.Base.csproj" />
+		<ProjectReference Include="..\Ujeby.Api.Client.Base\Ujeby.Api.Client.Base.csproj" />
+		<ProjectReference Include="..\Ujeby.Blazor.Base\Ujeby.Blazor.Base.csproj" />
+		<ProjectReference Include="..\Ujeby.Common\Ujeby.Common.csproj" />
+		<ProjectReference Include="..\Ujeby\Ujeby.csproj" />
+	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="xcopy /Y /R &quot;$(ProjectDir)Bin\Release\net6.0\Ujeby.*.dll&quot; &quot;$(SolutionDir)Deploy&quot;&#xD;&#xA;xcopy /Y /R &quot;$(ProjectDir)Bin\Release\net6.0\Ujeby.*.pdb&quot; &quot;$(SolutionDir)Deploy&quot;" />
+		<Exec Command="copy $(SolutionDir)3rd\SDL2\*.dll $(OutDir)" />
+	</Target>
+
+</Project>
