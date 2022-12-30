@@ -57,6 +57,7 @@
 		public static v2i operator +(v2i a, v2i b) => new(a.X + b.X, a.Y + b.Y);
 		public static v2i operator -(v2i a, v2i b) => new(a.X - b.X, a.Y - b.Y);
 		public static v2i operator *(v2i a, v2i b) => new(a.X * b.X, a.Y * b.Y);
+		public static v2i operator %(v2i a, v2i b) => new(a.X % b.X, a.Y % b.Y);
 		public static v2i operator +(v2i a, long b) => new(a.X + b, a.Y + b);
 		public static v2i operator -(v2i a, long b) => new(a.X - b, a.Y - b);
 		public static v2i operator *(v2i a, double k) => new((long)(a.X * k), (long)(a.Y * k));
@@ -68,9 +69,23 @@
 		public static bool operator ==(v2i a, v2i b) => a.X == b.X && a.Y == b.Y;
 		public static bool operator !=(v2i a, v2i b) => !(a == b);
 
+		/// <summary>
+		/// Manhattan length
+		/// </summary>
+		/// <returns></returns>
+		public long ManhLength() => X + Y;
+		public long Length() => (long)Math.Sqrt(X * X + Y * Y);
 		public long Area() => X * Y;
 		public v2i Abs() => new(Math.Abs(X), Math.Abs(Y));
 		public v2i Inv() => new(-X, -Y);
+
+		/// <summary>
+		/// Manhattan distance
+		/// </summary>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <returns></returns>
+		public static long ManhDistance(v2i a, v2i b) => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
 
 		public static v2i Min(v2i v1, v2i v2) => new(Math.Min(v1.X, v2.X), Math.Min(v1.Y, v2.Y));
 		public static v2i Max(v2i v1, v2i v2) => new(Math.Max(v1.X, v2.X), Math.Max(v1.Y, v2.Y));
