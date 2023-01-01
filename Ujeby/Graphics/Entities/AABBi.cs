@@ -4,10 +4,7 @@ namespace Ujeby.Graphics.Entities
 {
 	public struct AABBi
 	{
-		/// <summary>bottom left - world coordinates</summary>
 		public v2i Min { get; private set; }
-
-		/// <summary>top right - world coordinates</summary>
 		public v2i Max { get; private set; }
 
 		public v2i HalfSize { get; private set; }
@@ -30,6 +27,6 @@ namespace Ujeby.Graphics.Entities
 			HalfSize = (max - min) / 2;
 		}
 
-		public AABBi GetAABB() => this;
+		public bool Contains(v2i p) => (Min <= p && p <= Max);
 	}
 }

@@ -36,6 +36,14 @@
 		public readonly static v2i Left = new(-1, 0);
 		public readonly static v2i Right = new(1, 0);
 
+		public readonly static v2i[] RightDownLeftUp = new[]
+		{
+			Right,
+			Down,
+			Left,
+			Up,
+		};
+
 		public v2i(long x, long y) : this()
 		{
 			X = x;
@@ -63,6 +71,11 @@
 		public static v2i operator *(v2i a, double k) => new((long)(a.X * k), (long)(a.Y * k));
 		public static v2i operator /(v2i a, double k) => new((long)(a.X / k), (long)(a.Y / k));
 		public static v2f operator /(v2i a, v2i b) => new((double)a.X / b.X, (double)a.Y / b.Y);
+		public static bool operator <(v2i a, v2i b) => a.X < b.X && a.Y < b.Y;
+		public static bool operator >(v2i a, v2i b) => a.X > b.X && a.Y > b.Y;
+		public static bool operator <=(v2i a, v2i b) => a.X <= b.X && a.Y <= b.Y;
+		public static bool operator >=(v2i a, v2i b) => a.X >= b.X && a.Y >= b.Y;
+
 
 		public static implicit operator v2f(v2i v) => new(v.X, v.Y);
 

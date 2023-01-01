@@ -167,6 +167,16 @@ namespace Ujeby.Graphics.Sdl
 				fill: fill);
 		}
 
+		protected void DrawGridLine(int x1, int y1, int x2, int y2, v4f color)
+		{
+			Sdl2Renderer.DrawLine(
+				(int)(WindowSize.X / 2 + GridOffset.X + x1 * MinorGridSize),
+				(int)(WindowSize.Y / 2 + GridOffset.Y + y1 * MinorGridSize),
+				(int)(WindowSize.X / 2 + GridOffset.X + x2 * MinorGridSize),
+				(int)(WindowSize.Y / 2 + GridOffset.Y + y2 * MinorGridSize),
+				color);
+		}
+
 		private v4f _bgColor = new(0.05, 0.05, 0.05, 1);
 		private v4f _minorColor = new(0.06, 0.06, 0.06, 1);
 		private v4f _majorColor = new(0.1, 0.1, 0.1, 1);
