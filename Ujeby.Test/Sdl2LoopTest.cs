@@ -7,6 +7,8 @@ namespace Ujeby.Test
 {
 	internal class Sdl2LoopTest : Sdl2Loop
 	{
+		public override string Name => nameof(Sdl2LoopTest);
+
 		public Sdl2LoopTest(v2i windowSize) : base(windowSize)
 		{
 		}

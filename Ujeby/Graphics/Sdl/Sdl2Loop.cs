@@ -152,6 +152,7 @@ namespace Ujeby.Graphics.Sdl
 		protected abstract void Update();
 		protected abstract void Render();
 		protected abstract void Destroy();
+		public abstract string Name { get; }
 
 		protected void DrawRect(int x, int y, int w, int h,
 			v4f? border = null, v4f? fill = null)
