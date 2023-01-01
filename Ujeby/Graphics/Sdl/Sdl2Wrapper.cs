@@ -1,5 +1,4 @@
 ﻿using SDL2;
-using System.Numerics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Vectors;
 
@@ -33,7 +32,14 @@ namespace Ujeby.Graphics.Sdl
 
 			_ = SDL.SDL_SetRenderDrawBlendMode(RendererPtr, SDL.SDL_BlendMode.SDL_BLENDMODE_ADD);
 
-			CurrentFont = SpriteCache.LoadFont(fontName);
+			//CurrentFont = SpriteCache.LoadFont(SpriteCache.LoadSpriteFromFile,
+			//	fontName: Path.Combine(SpriteCache.ContentDirectory, "Fonts", $"{fontName}.png"),
+			//	fontDataName: Path.Combine(SpriteCache.ContentDirectory, "Fonts", $"{fontName}-data.png");
+
+			CurrentFont = SpriteCache.LoadFont(SpriteCache.LoadSpriteFromResource,
+				fontName: $"Ujeby.Content.Fonts.{fontName}.png",
+				fontDataName: $"Ujeby.Content.Fonts.{fontName}-data.png"); ;
+			
 			SpriteCache.CreateTexture(CurrentFont.SpriteId, out _);
 		}
 

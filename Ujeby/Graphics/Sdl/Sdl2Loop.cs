@@ -1,4 +1,4 @@
-﻿using SDL2;
+﻿using System.Diagnostics;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl.Interfaces;
 using Ujeby.Vectors;
@@ -52,13 +52,26 @@ namespace Ujeby.Graphics.Sdl
 
 		protected bool _terminate;
 
+		private readonly v4f _bgColor = new(0.05, 0.05, 0.05, 1);
+		private readonly v4f _minorColor = new(0.06, 0.06, 0.06, 1);
+		private readonly v4f _majorColor = new(0.1, 0.1, 0.1, 1);
+		private readonly v4f _axisColor = new(0.5, 0.5, 0.5, 1);
+
+		protected bool _drag { get; private set; } = false;
+		protected v2i _dragStart { get; private set; }
+
+		private Stopwatch _frameSw = new();
+		protected double _frameTime { get; private set; }
+		protected long _frameCount { get; private set; }
+
+		protected const long _fpsUpdate = 60;
+
+		protected double Fps { get; private set; }
+
 		protected Sdl2Loop(v2i windowSize)
 		{
 			WindowSize = windowSize;
 		}
-
-		protected bool _drag = false;
-		protected v2i _dragStart;
 
 		public void Run(Func<bool> handleInput)
 		{
@@ -66,6 +79,8 @@ namespace Ujeby.Graphics.Sdl
 
 			while (Sdl2Wrapper.HandleInput(handleInput) && !_terminate)
 			{
+				_frameSw.Restart();
+
 				MouseWindowPosition = Sdl2Wrapper.GetMouse(out _mouseState);
 
 				// mouse right
@@ -113,6 +128,13 @@ namespace Ujeby.Graphics.Sdl
 					Sdl2Wrapper.SetWindowTitle(Title);
 
 				Sdl2Wrapper.Render();
+
+				_frameSw.Stop();
+				_frameTime = _frameSw.ElapsedMilliseconds;
+				if (_frameCount % _fpsUpdate == 0)
+					Fps = 1000 / _frameTime;
+
+				_frameCount++;
 			}
 
 			Destroy();
@@ -176,11 +198,6 @@ namespace Ujeby.Graphics.Sdl
 				(int)(WindowSize.Y / 2 + GridOffset.Y + y2 * MinorGridSize),
 				color);
 		}
-
-		private v4f _bgColor = new(0.05, 0.05, 0.05, 1);
-		private v4f _minorColor = new(0.06, 0.06, 0.06, 1);
-		private v4f _majorColor = new(0.1, 0.1, 0.1, 1);
-		private v4f _axisColor = new(0.5, 0.5, 0.5, 1);
 
 		protected void DrawGrid(
 			bool showAxis = true, bool showMajor = true, bool showMinor = true)
