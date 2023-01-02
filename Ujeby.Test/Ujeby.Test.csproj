@@ -7,6 +7,20 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Shaders\shader.frag" />
+	  <None Remove="Shaders\shader.vert" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Shaders\shader.frag">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="Shaders\shader.vert">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\Ujeby.Api.Base\Ujeby.Api.Base.csproj" />
 		<ProjectReference Include="..\Ujeby.Api.Client.Base\Ujeby.Api.Client.Base.csproj" />
 		<ProjectReference Include="..\Ujeby.Blazor.Base\Ujeby.Blazor.Base.csproj" />

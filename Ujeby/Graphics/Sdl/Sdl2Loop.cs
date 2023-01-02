@@ -1,11 +1,11 @@
 ﻿using System.Diagnostics;
 using Ujeby.Graphics.Entities;
-using Ujeby.Graphics.Sdl.Interfaces;
+using Ujeby.Graphics.Interfaces;
 using Ujeby.Vectors;
 
 namespace Ujeby.Graphics.Sdl
 {
-	public abstract class Sdl2Loop : IRunnable
+    public abstract class Sdl2Loop : IRunnable, ILoop
 	{
 		/// <summary>
 		/// workspace dragging with right mouse button
@@ -148,11 +148,12 @@ namespace Ujeby.Graphics.Sdl
 		{
 		}
 
-		protected abstract void Init();
-		protected abstract void Update();
-		protected abstract void Render();
-		protected abstract void Destroy();
 		public abstract string Name { get; }
+
+		public abstract void Init();
+		public abstract void Update();
+		public abstract void Render();
+		public abstract void Destroy();
 
 		protected void DrawRect(int x, int y, int w, int h,
 			v4f? border = null, v4f? fill = null)

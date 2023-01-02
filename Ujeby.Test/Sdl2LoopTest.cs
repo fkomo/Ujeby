@@ -13,16 +13,16 @@ namespace Ujeby.Test
 		{
 		}
 
-		protected override void Init()
+		public override void Init()
 		{
 			ShowCursor(false); 
 		}
 
-		protected override void Update()
+		public override void Update()
 		{
 		}
 
-		protected override void Render()
+		public override void Render()
 		{
 			DrawGrid();
 
@@ -52,7 +52,7 @@ namespace Ujeby.Test
 				style: GridCursorStyles.FullRowColumn);
 		}
 
-		protected override void Destroy()
+		public override void Destroy()
 		{
 			ShowCursor();
 		}
