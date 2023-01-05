@@ -13,16 +13,12 @@ namespace Ujeby.Test
 		{
 		}
 
-		public override void Init()
+		protected override void Init()
 		{
 			ShowCursor(false); 
 		}
 
-		public override void Update()
-		{
-		}
-
-		public override void Render()
+		protected override void Render()
 		{
 			DrawGrid();
 
@@ -43,16 +39,16 @@ namespace Ujeby.Test
 				new Text($"{nameof(_mouseLeft)}: {_mouseLeft}"),
 				new Text($"{nameof(_mouseRight)}: {_mouseRight}"),
 				new Text($"{nameof(WindowSize)}: {WindowSize}"),
-				new Text($"{nameof(GridOffset)}: {GridOffset}"),
-				new Text($"{nameof(MouseGridPosition)}: {MouseGridPosition}"),
-				new Text($"{nameof(MouseWindowPosition)}: {MouseWindowPosition}")
+				new Text($"{nameof(Grid.Offset)}: {Grid.Offset}"),
+				new Text($"{nameof(Grid.MousePosition)}: {Grid.MousePosition}"),
+				new Text($"{nameof(MousePosition)}: {MousePosition}")
 				);
 
 			DrawGridMouseCursor(
 				style: GridCursorStyles.FullRowColumn);
 		}
 
-		public override void Destroy()
+		protected override void Destroy()
 		{
 			ShowCursor();
 		}

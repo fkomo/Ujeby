@@ -12,10 +12,10 @@ namespace Ujeby.Test
 			{
 				v2i windowSize = new(1920, 1080);
 
-				//Sdl2Wrapper.Init("AoC.Vis", windowSize);
-				//new Sdl2LoopTest(windowSize).Run(HandleInput);
+				Sdl2Wrapper.Init("AoC.Vis", windowSize);
+				new Sdl2LoopTest(windowSize).Run(HandleInput);
 
-				new OpenTKLoopTest(windowSize, "AoC.Vis").Run();
+				//new OpenTKLoopTest(windowSize, "AoC.Vis").Run();
 			}
 			catch (Exception ex)
 			{

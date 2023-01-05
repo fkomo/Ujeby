@@ -2,9 +2,9 @@
 {
     public interface ILoop
     {
-		abstract void Init();
-		abstract void Update();
-		abstract void Render();
-		abstract void Destroy();
+		void Init();
+		void Update();
+		void Render();
+		void Destroy();
 	}
 }

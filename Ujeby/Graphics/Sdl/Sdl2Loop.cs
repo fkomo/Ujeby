@@ -5,42 +5,12 @@ using Ujeby.Vectors;
 
 namespace Ujeby.Graphics.Sdl
 {
-    public abstract class Sdl2Loop : IRunnable, ILoop
+    public abstract class Sdl2Loop : IRunnable
 	{
-		/// <summary>
-		/// workspace dragging with right mouse button
-		/// </summary>
-		public bool DragEnabled = true;
-
-		/// <summary>
-		/// size/step of minor grid lines
-		/// </summary>
-		public int MinorGridSize = 16;
-
-		/// <summary>
-		/// copunt of minor grid lines per major
-		/// </summary>
-		public int MajorGridSize = 10;
-
 		/// <summary>
 		/// mouse position in window (from top-left)
 		/// </summary>
-		protected v2i MouseWindowPosition;
-
-		/// <summary>
-		/// mouse position in grid (from window center)
-		/// </summary>
-		protected v2i MouseGridPosition;
-
-		/// <summary>
-		/// MouseGridPosition / GridSize 
-		/// </summary>
-		protected v2i MouseGridPositionDiscrete => MouseGridPosition / MinorGridSize;
-
-		/// <summary>
-		/// grid offset from window center
-		/// </summary>
-		protected v2i GridOffset;
+		protected v2i MousePosition;
 
 		protected readonly v2i WindowSize;
 
@@ -53,12 +23,8 @@ namespace Ujeby.Graphics.Sdl
 		protected bool _terminate;
 
 		private readonly v4f _bgColor = new(0.05, 0.05, 0.05, 1);
-		private readonly v4f _minorColor = new(0.06, 0.06, 0.06, 1);
-		private readonly v4f _majorColor = new(0.1, 0.1, 0.1, 1);
-		private readonly v4f _axisColor = new(0.5, 0.5, 0.5, 1);
 
-		protected bool _drag { get; private set; } = false;
-		protected v2i _dragStart { get; private set; }
+		protected WorkspaceGrid Grid;
 
 		private Stopwatch _frameSw = new();
 		protected double _frameTime { get; private set; }
@@ -71,6 +37,11 @@ namespace Ujeby.Graphics.Sdl
 		protected Sdl2Loop(v2i windowSize)
 		{
 			WindowSize = windowSize;
+
+			Grid = new WorkspaceGrid()
+			{
+				DragEnabled = true,
+			};
 		}
 
 		public void Run(Func<bool> handleInput)
@@ -81,30 +52,19 @@ namespace Ujeby.Graphics.Sdl
 			{
 				_frameSw.Restart();
 
-				MouseWindowPosition = Sdl2Wrapper.GetMouse(out _mouseState);
+				MousePosition = Sdl2Wrapper.GetMouse(out _mouseState);
 
 				// mouse right
 				var right = (_mouseState & 4) == 4;
-				if (DragEnabled)
-				{
-					if (right && !_mouseRight)
-					{
-						_drag = true;
-						_dragStart = MouseWindowPosition;
-					}
-					else if (!right && _mouseRight)
-					{
-						_drag = false;
-					}
-					else if (_drag)
-					{
-						GridOffset += MouseWindowPosition - _dragStart;
-						_dragStart = MouseWindowPosition;
-					}
-				}
-				_mouseRight = right;
+				if (right && !_mouseRight)
+					Grid.DragStart(MousePosition);
 
-				MouseGridPosition = (MouseWindowPosition - WindowSize / 2) - GridOffset;
+				else if (!right && _mouseRight)
+					Grid.DragEnd(MousePosition);
+
+				Grid.UpdateMouse(MousePosition, WindowSize);
+
+				_mouseRight = right;
 
 				// mouse left
 				var left = (_mouseState & 1) == 1;
@@ -114,8 +74,11 @@ namespace Ujeby.Graphics.Sdl
 					LeftMouseUp();
 				_mouseLeft = left;
 
-				MinorGridSize = Math.Max(2, MinorGridSize + Sdl2Wrapper.MouseWheel);
-				Sdl2Wrapper.MouseWheel = 0;
+				if (Sdl2Wrapper.MouseWheel != 0)
+				{
+					Grid.Zoom(Sdl2Wrapper.MouseWheel);
+					Sdl2Wrapper.MouseWheel = 0;
+				}
 
 				Update();
 
@@ -150,10 +113,21 @@ namespace Ujeby.Graphics.Sdl
 
 		public abstract string Name { get; }
 
-		public abstract void Init();
-		public abstract void Update();
-		public abstract void Render();
-		public abstract void Destroy();
+		protected virtual void Init()
+		{
+		}
+
+		protected virtual void Update()
+		{
+		}
+
+		protected virtual void Render()
+		{
+		}
+
+		protected virtual void Destroy()
+		{
+		}
 
 		protected void DrawRect(int x, int y, int w, int h,
 			v4f? border = null, v4f? fill = null)
@@ -183,10 +157,10 @@ namespace Ujeby.Graphics.Sdl
 			v4f? border = null, v4f? fill = null)
 		{
 			DrawRect(
-				(int)(WindowSize.X / 2 + GridOffset.X + x * MinorGridSize) - MinorGridSize / 2,
-				(int)(WindowSize.Y / 2 + GridOffset.Y + y * MinorGridSize) - MinorGridSize / 2,
-				w * MinorGridSize,
-				h * MinorGridSize,
+				(int)(WindowSize.X / 2 + Grid.Offset.X + x * Grid.MinorSize) - Grid.MinorSize / 2,
+				(int)(WindowSize.Y / 2 + Grid.Offset.Y + y * Grid.MinorSize) - Grid.MinorSize / 2,
+				w * Grid.MinorSize,
+				h * Grid.MinorSize,
 				border: border,
 				fill: fill);
 		}
@@ -194,83 +168,83 @@ namespace Ujeby.Graphics.Sdl
 		protected void DrawGridLine(int x1, int y1, int x2, int y2, v4f color)
 		{
 			Sdl2Renderer.DrawLine(
-				(int)(WindowSize.X / 2 + GridOffset.X + x1 * MinorGridSize),
-				(int)(WindowSize.Y / 2 + GridOffset.Y + y1 * MinorGridSize),
-				(int)(WindowSize.X / 2 + GridOffset.X + x2 * MinorGridSize),
-				(int)(WindowSize.Y / 2 + GridOffset.Y + y2 * MinorGridSize),
+				(int)(WindowSize.X / 2 + Grid.Offset.X + x1 * Grid.MinorSize),
+				(int)(WindowSize.Y / 2 + Grid.Offset.Y + y1 * Grid.MinorSize),
+				(int)(WindowSize.X / 2 + Grid.Offset.X + x2 * Grid.MinorSize),
+				(int)(WindowSize.Y / 2 + Grid.Offset.Y + y2 * Grid.MinorSize),
 				color);
 		}
 
 		protected void DrawGrid(
 			bool showAxis = true, bool showMajor = true, bool showMinor = true)
 		{
-			var size = MinorGridSize;
-			var origin = WindowSize / 2 + GridOffset;
+			var size = Grid.MinorSize;
+			var origin = WindowSize / 2 + Grid.Offset;
 
 			if (showMinor)
 			{
 				for (var ix = 1; origin.X + ix * size < WindowSize.X; ix++)
-					Sdl2Renderer.DrawLine((int)origin.X + ix * size, 0, (int)origin.X + ix * size, (int)WindowSize.Y, _minorColor);
+					Sdl2Renderer.DrawLine((int)origin.X + ix * size, 0, (int)origin.X + ix * size, (int)WindowSize.Y, Grid.MinorColor);
 
 				for (var ix = 1; origin.X - ix * size >= 0; ix++)
-					Sdl2Renderer.DrawLine((int)origin.X - ix * size, 0, (int)origin.X - ix * size, (int)WindowSize.Y, _minorColor);
+					Sdl2Renderer.DrawLine((int)origin.X - ix * size, 0, (int)origin.X - ix * size, (int)WindowSize.Y, Grid.MinorColor);
 
 				for (var iy = 1; origin.Y + iy * size < WindowSize.Y; iy++)
-					Sdl2Renderer.DrawLine(0, (int)origin.Y + iy * size, (int)WindowSize.X, (int)origin.Y + iy * size, _minorColor);
+					Sdl2Renderer.DrawLine(0, (int)origin.Y + iy * size, (int)WindowSize.X, (int)origin.Y + iy * size, Grid.MinorColor);
 
 				for (var iy = 1; origin.Y - iy * size >= 0; iy++)
-					Sdl2Renderer.DrawLine(0, (int)origin.Y - iy * size, (int)WindowSize.X, (int)origin.Y - iy * size, _minorColor);
+					Sdl2Renderer.DrawLine(0, (int)origin.Y - iy * size, (int)WindowSize.X, (int)origin.Y - iy * size, Grid.MinorColor);
 
-				Sdl2Renderer.DrawLine((int)origin.X, 0, (int)origin.X, (int)WindowSize.Y, _minorColor);
-				Sdl2Renderer.DrawLine(0, (int)origin.Y, (int)WindowSize.X, (int)origin.Y, _minorColor);
+				Sdl2Renderer.DrawLine((int)origin.X, 0, (int)origin.X, (int)WindowSize.Y, Grid.MinorColor);
+				Sdl2Renderer.DrawLine(0, (int)origin.Y, (int)WindowSize.X, (int)origin.Y, Grid.MinorColor);
 			}
 
 			if (showMajor)
 			{
 				for (var ix = 1; origin.X + ix * size < WindowSize.X; ix++)
 				{
-					if (ix % MajorGridSize != 0)
+					if (ix % Grid.MajorSize != 0)
 						continue;
 
-					Sdl2Renderer.DrawLine((int)origin.X + ix * size, 0, (int)origin.X + ix * size, (int)WindowSize.Y, _majorColor);
+					Sdl2Renderer.DrawLine((int)origin.X + ix * size, 0, (int)origin.X + ix * size, (int)WindowSize.Y, Grid.MajorColor);
 				}
 
 				for (var ix = 1; origin.X - ix * size >= 0; ix++)
 				{
-					if (ix % MajorGridSize != 0)
+					if (ix % Grid.MajorSize != 0)
 						continue;
 
-					Sdl2Renderer.DrawLine((int)origin.X - ix * size, 0, (int)origin.X - ix * size, (int)WindowSize.Y, _majorColor);
+					Sdl2Renderer.DrawLine((int)origin.X - ix * size, 0, (int)origin.X - ix * size, (int)WindowSize.Y, Grid.MajorColor);
 				}
 
 				for (var iy = 1; origin.Y + iy * size < WindowSize.Y; iy++)
 				{
-					if (iy % MajorGridSize != 0)
+					if (iy % Grid.MajorSize != 0)
 						continue;
 
-					Sdl2Renderer.DrawLine(0, (int)origin.Y + iy * size, (int)WindowSize.X, (int)origin.Y + iy * size, _majorColor);
+					Sdl2Renderer.DrawLine(0, (int)origin.Y + iy * size, (int)WindowSize.X, (int)origin.Y + iy * size, Grid.MajorColor);
 				}
 
 				for (var iy = 1; origin.Y - iy * size >= 0; iy++)
 				{
-					if (iy % MajorGridSize != 0)
+					if (iy % Grid.MajorSize != 0)
 						continue;
 
-					Sdl2Renderer.DrawLine(0, (int)origin.Y - iy * size, (int)WindowSize.X, (int)origin.Y - iy * size, _majorColor);
+					Sdl2Renderer.DrawLine(0, (int)origin.Y - iy * size, (int)WindowSize.X, (int)origin.Y - iy * size, Grid.MajorColor);
 				}
 			}
 
 			if (showAxis)
 			{
-				Sdl2Renderer.DrawLine((int)origin.X, 0, (int)origin.X, (int)WindowSize.Y, _axisColor);
-				Sdl2Renderer.DrawLine(0, (int)origin.Y, (int)WindowSize.X, (int)origin.Y, _axisColor);
+				Sdl2Renderer.DrawLine((int)origin.X, 0, (int)origin.X, (int)WindowSize.Y, Grid.AxisColor);
+				Sdl2Renderer.DrawLine(0, (int)origin.Y, (int)WindowSize.X, (int)origin.Y, Grid.AxisColor);
 			}
 		}
 
 		protected void DrawGridMouseCursor(
 			GridCursorStyles style = GridCursorStyles.Simple, bool printCoords = true)
 		{
-			var m = MouseGridPositionDiscrete;
+			var m = Grid.MousePositionDiscrete;
 
 			switch (style)
 			{
@@ -284,19 +258,19 @@ namespace Ujeby.Graphics.Sdl
 
 				case GridCursorStyles.FullRowColumn:
 					{
-						var cursorColor = new v4f(1, 1, 0, 0.1);
+						var cursorColor = new v4f(1, 1, 0, .1);
 
 						DrawRect(
 							0,
-							(int)(WindowSize.Y / 2 + GridOffset.Y + m.Y * MinorGridSize) - MinorGridSize / 2,
+							(int)(WindowSize.Y / 2 + Grid.Offset.Y + m.Y * Grid.MinorSize) - Grid.MinorSize / 2,
 							(int)WindowSize.X,
-							MinorGridSize,
+							Grid.MinorSize,
 							fill: cursorColor);
 
 						DrawRect(
-							(int)(WindowSize.X / 2 + GridOffset.X + m.X * MinorGridSize) - MinorGridSize / 2,
+							(int)(WindowSize.X / 2 + Grid.Offset.X + m.X * Grid.MinorSize) - Grid.MinorSize / 2,
 							0,
-							MinorGridSize,
+							Grid.MinorSize,
 							(int)WindowSize.Y,
 							fill: cursorColor);
 					}
@@ -305,8 +279,8 @@ namespace Ujeby.Graphics.Sdl
 
 			if (printCoords)
 			{
-				var p = (MouseWindowPosition / MinorGridSize) * MinorGridSize;
-				DrawText(p + MinorGridSize * 2, v2i.Zero, new Text($"[{(int)m.X};{(int)m.Y}]"));
+				var p = (MousePosition / Grid.MinorSize) * Grid.MinorSize;
+				DrawText(p + Grid.MinorSize * 2, v2i.Zero, new Text($"[{(int)m.X};{(int)m.Y}]"));
 			}
 		}
 
@@ -324,16 +298,6 @@ namespace Ujeby.Graphics.Sdl
 			bool show = true)
 		{
 			Sdl2Wrapper.ShowCursor(show);
-		}
-
-		protected void SetGridCenter(v2i v)
-		{
-			GridOffset = v.Inv();
-		}
-
-		protected void MoveGridCenter(v2i v)
-		{
-			GridOffset -= v;
 		}
 	}
 }
