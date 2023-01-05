@@ -42,12 +42,12 @@ namespace Ujeby.Graphics
 		protected bool _drag { get; private set; } = false;
 		protected v2i _dragStart { get; private set; }
 
-		protected void SetGridCenter(v2i v)
+		public void SetCenter(v2i v)
 		{
 			Offset = v.Inv();
 		}
 
-		protected void MoveGridCenter(v2i v)
+		public void MoveCenter(v2i v)
 		{
 			Offset -= v;
 		}
