@@ -29,7 +29,7 @@ namespace Ujeby.Test
 		{
 		}
 
-		public override void Init()
+		protected override void Init()
 		{
 			// We need to send our vertices over to the graphics card so OpenGL can use them.
 			// To do this, we need to create what's called a Vertex Buffer Object (VBO).
@@ -102,11 +102,11 @@ namespace Ujeby.Test
 			// Setup is now complete! Now we move to the OnRenderFrame function to finally draw the triangle.
 		}
 
-		public override void Update()
+		protected override void Update()
 		{
 		}
 
-		public override void Render()
+		protected override void Render()
 		{
 			// To draw an object in OpenGL, it's typically as simple as binding your shader,
 			// setting shader uniforms (not done here, will be shown in a future tutorial)
@@ -138,7 +138,7 @@ namespace Ujeby.Test
 			// And that's all you have to do for rendering! You should now see a yellow triangle on a black screen.
 		}
 
-		public override void Destroy()
+		protected override void Destroy()
 		{
 			// Unbind all the resources by binding the targets to 0/null.
 			GL.BindBuffer(BufferTarget.ArrayBuffer, 0);

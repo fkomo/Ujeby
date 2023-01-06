@@ -7,6 +7,8 @@ namespace Ujeby.Graphics.Sdl
 {
     public abstract class Sdl2Loop : IRunnable
 	{
+		public abstract string Name { get; }
+
 		/// <summary>
 		/// mouse position in window (from top-left)
 		/// </summary>
@@ -18,11 +20,11 @@ namespace Ujeby.Graphics.Sdl
 		protected bool _mouseLeft;
 		protected bool _mouseRight;
 
-		protected string Title;
-
 		protected bool _terminate;
 
-		private readonly v4f _bgColor = new(0.05, 0.05, 0.05, 1);
+		protected string Title;
+
+		private readonly v4f _bgColor = new(.05, .05, .05, 1);
 
 		protected WorkspaceGrid Grid;
 
@@ -110,8 +112,6 @@ namespace Ujeby.Graphics.Sdl
 		protected virtual void LeftMouseUp()
 		{
 		}
-
-		public abstract string Name { get; }
 
 		protected virtual void Init()
 		{

@@ -4,56 +4,26 @@ using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System.Diagnostics;
-using Ujeby.Graphics.Interfaces;
 using Ujeby.Vectors;
 
 namespace Ujeby.Graphics.OpenTK
 {
-	public abstract class OpenTKLoop : GameWindow, ILoop
+	public abstract class OpenTKLoop : GameWindow
 	{
-		/// <summary>
-		/// workspace dragging with right mouse button
-		/// </summary>
-		public bool DragEnabled = true;
-
-		/// <summary>
-		/// size/step of minor grid lines
-		/// </summary>
-		public int MinorGridSize = 16;
-
-		/// <summary>
-		/// copunt of minor grid lines per major
-		/// </summary>
-		public int MajorGridSize = 10;
+		public abstract string Name { get; }
 
 		/// <summary>
 		/// mouse position in window (from top-left)
 		/// </summary>
-		protected v2i MouseWindowPosition;
-
-		/// <summary>
-		/// mouse position in grid (from window center)
-		/// </summary>
-		protected v2i MouseGridPosition;
-
-		/// <summary>
-		/// MouseGridPosition / GridSize 
-		/// </summary>
-		protected v2i MouseGridPositionDiscrete => MouseGridPosition / MinorGridSize;
-
-		/// <summary>
-		/// grid offset from window center
-		/// </summary>
-		protected v2i GridOffset;
+		protected new v2i MousePosition;
 
 		protected readonly v2i WindowSize;
 
 		protected bool _terminate;
 
+		protected WorkspaceGrid Grid;
+
 		private readonly v4f _bgColor = new(0.05, 0.05, 0.05, 1);
-		private readonly v4f _minorColor = new(0.06, 0.06, 0.06, 1);
-		private readonly v4f _majorColor = new(0.1, 0.1, 0.1, 1);
-		private readonly v4f _axisColor = new(0.5, 0.5, 0.5, 1);
 
 		protected bool _drag { get; private set; } = false;
 		protected v2i _dragStart { get; private set; }
@@ -75,6 +45,11 @@ namespace Ujeby.Graphics.OpenTK
 			})
 		{
 			WindowSize = windowSize;
+
+			Grid = new WorkspaceGrid()
+			{
+				DragEnabled = true,
+			};
 		}
 
 		protected override void OnLoad()
@@ -97,29 +72,17 @@ namespace Ujeby.Graphics.OpenTK
 				Close();
 			}
 
-			MouseWindowPosition = new v2i((long)MouseState.Position.X, (long)MouseState.Position.Y);
+			MousePosition = new v2i((long)MouseState.Position.X, (long)MouseState.Position.Y);
 
 			// mouse right
 			var right = MouseState.IsButtonDown(MouseButton.Right);
-			if (DragEnabled)
-			{
-				if (right && !MouseState.WasButtonDown(MouseButton.Right))
-				{
-					_drag = true;
-					_dragStart = MouseWindowPosition;
-				}
-				else if (!right && MouseState.WasButtonDown(MouseButton.Right))
-				{
-					_drag = false;
-				}
-				else if (_drag)
-				{
-					GridOffset += MouseWindowPosition - new v2i((long)MouseState.PreviousPosition.X, (long)MouseState.PreviousPosition.Y);
-					_dragStart = MouseWindowPosition;
-				}
-			}
+			if (right && !MouseState.WasButtonDown(MouseButton.Right))
+				Grid.DragStart(MousePosition);
 
-			MouseGridPosition = (MouseWindowPosition - WindowSize / 2) - GridOffset;
+			else if (!right && MouseState.WasButtonDown(MouseButton.Right))
+				Grid.DragEnd(MousePosition);
+
+			Grid.UpdateMouse(MousePosition, WindowSize);
 
 			// mouse left
 			var left = MouseState.IsButtonDown(MouseButton.Left);
@@ -127,8 +90,6 @@ namespace Ujeby.Graphics.OpenTK
 				LeftMouseDown();
 			else if (!left && MouseState.WasButtonDown(MouseButton.Left))
 				LeftMouseUp();
-
-			MinorGridSize = Math.Max(2, MinorGridSize);
 
 			Update();
 		}
@@ -174,20 +135,20 @@ namespace Ujeby.Graphics.OpenTK
 		{
 		}
 
-		public abstract void Init();
-		public abstract void Update();
-		public abstract void Render();
-		public abstract void Destroy();
-		public abstract string Name { get; }
-
-		protected void SetGridCenter(v2i v)
+		protected virtual void Init()
 		{
-			GridOffset = v.Inv();
 		}
 
-		protected void MoveGridCenter(v2i v)
+		protected virtual void Update()
 		{
-			GridOffset -= v;
+		}
+
+		protected virtual void Render()
+		{
+		}
+
+		protected virtual void Destroy()
+		{
 		}
 	}
 }
