@@ -1,5 +1,5 @@
 ﻿using SDL2;
-using System.Numerics;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Sdl;
@@ -23,24 +23,6 @@ namespace Ujeby.Graphics
 		/// </summary>
 		private static readonly Dictionary<string, Sprite> Library = new();
 
-		public static Sprite LoadSprite(string filename, string id = null)
-		{
-			var sprite = Library.Values.SingleOrDefault(s => s.Filename == filename);
-			if (sprite == null)
-			{
-				sprite = new Sprite
-				{
-					Filename = filename,
-					Id = id ?? Guid.NewGuid().ToString("N"),
-				};
-				if (!LoadImage(filename, out sprite.ImagePtr, out sprite.Size, out sprite.Data))
-					return null;
-
-				Library.Add(sprite.Id, sprite);
-			}
-			return sprite;
-		}
-
 		public static Sprite Get(string id)
 		{
 			if (string.IsNullOrEmpty(id))
@@ -51,7 +33,7 @@ namespace Ujeby.Graphics
 				if (!LibraryFileMap.TryGetValue(id, out string filename))
 					return null;
 
-				sprite = LoadSprite(filename, id);
+				sprite = LoadSpriteFromFile(filename, id);
 				if (CreateTexture(sprite.Id, out Sprite spriteWithTexture))
 					sprite = spriteWithTexture;
 			}
@@ -59,28 +41,25 @@ namespace Ujeby.Graphics
 			return sprite;
 		}
 
-		public static Font LoadFont(string name)
+		public static Font LoadFont(Func<string, string, Sprite> loadSpriteFunc, string fontName, 
+			string fontDataName = null)
 		{
-			var file = Path.Combine(ContentDirectory, "Fonts", $"{ name }.png");
-
-			var fileInfo = new FileInfo(file);
-			var sizeString = fileInfo.Name
-				.Replace(fileInfo.Extension, string.Empty)
+			var sizeString = fontName
+				.Split(".").SkipLast(1).Last()
 				.Split("-").Last()
 				.Split("x");
 
 			var font = new Font
 			{
-				SpriteId = LoadSprite(file)?.Id,
+				SpriteId = loadSpriteFunc(fontName, null)?.Id,
 				CharSize = new v2i(Convert.ToInt32(sizeString[0]), Convert.ToInt32(sizeString[1])),
 				Spacing = new v2i(1, 1),
 			};
 
 			// create aabb's for each character
-			var dataFile = Path.Combine(ContentDirectory, "Fonts", $"{ name }-data.png");
-			if (File.Exists(dataFile))
+			var dataSprite = loadSpriteFunc(fontDataName, null);
+			if (dataSprite != null)
 			{
-				var dataSprite = LoadSprite(dataFile);
 				font.DataSpriteId = dataSprite.Id;
 
 				font.CharBoxes = new AABBi[(int)(dataSprite.Size.X / font.CharSize.X)];
@@ -150,25 +129,77 @@ namespace Ujeby.Graphics
 			Library.Clear();
 		}
 
-		private static bool LoadImage(string filename, out IntPtr imagePtr, out v2i size, out uint[] data)
+		public static Sprite LoadSpriteFromFile(string filename, string id = null)
 		{
-			imagePtr = IntPtr.Zero;
-			size = v2i.Zero;
-			data = null;
+			var sprite = Library.Values.SingleOrDefault(s => s.Filename == filename);
+			if (sprite == null)
+			{
+				sprite = new Sprite
+				{
+					Filename = filename,
+					Id = id ?? Guid.NewGuid().ToString("N"),
+				};
+				if (!LoadImageFromFile(filename, out sprite.ImagePtr, out sprite.Size, out sprite.Data))
+					return null;
 
+				Library.Add(sprite.Id, sprite);
+			}
+			return sprite;
+		}
+
+		public static Sprite LoadSpriteFromResource(string filename, string id = null)
+		{
+			var sprite = Library.Values.SingleOrDefault(s => s.Filename == filename);
+			if (sprite == null)
+			{
+				sprite = new Sprite
+				{
+					Filename = filename,
+					Id = id ?? Guid.NewGuid().ToString("N"),
+				};
+				if (!LoadImageFromResource(filename, out sprite.ImagePtr, out sprite.Size, out sprite.Data))
+					return null;
+
+				Library.Add(sprite.Id, sprite);
+			}
+			return sprite;
+		}
+
+		private static bool LoadImageFromResource(string name, out IntPtr imagePtr, out v2i size, out uint[] data)
+		{
+			var imageData = Array.Empty<byte>();
+
+			var assembly = Assembly.GetExecutingAssembly();
+			using (var resourceStream = assembly.GetManifestResourceStream(name))
+			{
+				imageData = new byte[resourceStream.Length];
+				resourceStream.Read(imageData, 0, imageData.Length);
+			}
+
+			var imageDataPtr = Marshal.AllocHGlobal(imageData.Length);
+			Marshal.Copy(imageData, 0, imageDataPtr, imageData.Length);
+
+			var stream = SDL.SDL_RWFromMem(imageDataPtr, imageData.Length);
+
+			imagePtr = SDL_image.IMG_Load_RW(stream, 0);
+			var surface = Marshal.PtrToStructure<SDL2.SDL.SDL_Surface>(imagePtr);
+
+			Marshal.FreeHGlobal(imageDataPtr);
+
+			return LoadImage(surface, out size, out data);
+		}
+
+		private static bool LoadImageFromFile(string filename, out IntPtr imagePtr, out v2i size, out uint[] data)
+		{
 			imagePtr = SDL_image.IMG_Load(filename);
 			var surface = Marshal.PtrToStructure<SDL2.SDL.SDL_Surface>(imagePtr);
 
+			return LoadImage(surface, out size, out data);
+		}
+
+		private static bool LoadImage(SDL.SDL_Surface surface, out v2i size, out uint[] data)
+		{
 			size = new v2i(surface.w, surface.h);
-
-			//var bitmap = new Bitmap(fileName);
-			//var data = bitmap.LockBits(
-			//	new Rectangle(Point.Empty, bitmap.Size), 
-			//	System.Drawing.Imaging.ImageLockMode.ReadWrite,
-			//	bitmap.PixelFormat);
-
-			//sprite.Data = new byte[data.Height * data.Stride];
-			//Marshal.Copy(data.Scan0, sprite.Data, 0, sprite.Data.Length);
 
 			var tmpData = new byte[surface.w * surface.h * 4];
 			Marshal.Copy(surface.pixels, tmpData, 0, tmpData.Length);

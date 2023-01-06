@@ -26,10 +26,7 @@ namespace Ujeby.Graphics.Entities
         public string SpriteId;
         public string DataSpriteId;
 
-        /// <summary></summary>
         public v2i CharSize;
-
-        /// <summary></summary>
         public v2i Spacing;
 
         public AABBi[] CharBoxes;
