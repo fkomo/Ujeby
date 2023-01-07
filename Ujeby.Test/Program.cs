@@ -1,5 +1,7 @@
-﻿using System;
+﻿using BenchmarkDotNet.Running;
+using System;
 using Ujeby.Graphics.Sdl;
+using Ujeby.Test.Benchmarks;
 using Ujeby.Vectors;
 
 namespace Ujeby.Test
@@ -10,6 +12,9 @@ namespace Ujeby.Test
 		{
 			try
 			{
+				// benchmarks
+				var summary = BenchmarkRunner.Run<IntVsString>();
+
 				v2i windowSize = new(1920, 1080);
 
 				//Sdl2Wrapper.Init("AoC.Vis", windowSize);

@@ -21,6 +21,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="BenchmarkDotNet" Version="0.13.3" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\Ujeby.Api.Base\Ujeby.Api.Base.csproj" />
 		<ProjectReference Include="..\Ujeby.Api.Client.Base\Ujeby.Api.Client.Base.csproj" />
 		<ProjectReference Include="..\Ujeby.Blazor.Base\Ujeby.Blazor.Base.csproj" />
