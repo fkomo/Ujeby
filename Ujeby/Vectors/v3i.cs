@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-
-namespace Ujeby.Vectors
+﻿namespace Ujeby.Vectors
 {
 #pragma warning disable IDE1006 // Naming Styles
 	public struct v3i

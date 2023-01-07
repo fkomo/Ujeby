@@ -73,8 +73,12 @@
 		public static v4i operator /(v4i a, double k) => new((long)(a.X / k), (long)(a.Y / k), (long)(a.Z / k), (long)(a.W / k));
 		public static v4i operator /(v4i a, v4i b) => new(a.X / b.X, a.Y / b.Y, a.Z / b.Z, a.W / b.W);
 		public static v4i operator +(v4i a, v2i b) => new(a.X + b.X, a.Y + b.Y, a.Z, a.W);
+		public static v4i operator +(v4i a, v3i b) => new(a.X + b.X, a.Y + b.Y, a.Z + b.Z, a.W);
 
-		public static implicit operator v4f(v4i v) => new(v.X, v.Y);
+		public static implicit operator v2f(v4i v) => new(v.X, v.Y);
+
+		public static implicit operator v2i(v4i v) => new(v.X, v.Y);
+		public static implicit operator v3i(v4i v) => new(v.X, v.Y, v.Z);
 
 		public static bool operator ==(v4i a, v4i b) => a.X == b.X && a.Y == b.Y && a.Z == b.Z && a.W == b.W;
 		public static bool operator !=(v4i a, v4i b) => !(a == b);
