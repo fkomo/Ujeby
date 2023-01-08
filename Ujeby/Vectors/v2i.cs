@@ -70,7 +70,7 @@
 		public static v2i operator -(v2i a, long b) => new(a.X - b, a.Y - b);
 		public static v2i operator *(v2i a, double k) => new((long)(a.X * k), (long)(a.Y * k));
 		public static v2i operator /(v2i a, double k) => new((long)(a.X / k), (long)(a.Y / k));
-		public static v2f operator /(v2i a, v2i b) => new((double)a.X / b.X, (double)a.Y / b.Y);
+		public static v2i operator /(v2i a, v2i b) => new(a.X / b.X, a.Y / b.Y);
 		public static bool operator <(v2i a, v2i b) => a.X < b.X && a.Y < b.Y;
 		public static bool operator >(v2i a, v2i b) => a.X > b.X && a.Y > b.Y;
 		public static bool operator <=(v2i a, v2i b) => a.X <= b.X && a.Y <= b.Y;
