@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace Ujeby.Tools
+﻿namespace Ujeby.Tools
 {
 	public static class Strings
 	{
@@ -102,31 +100,6 @@ namespace Ujeby.Tools
 			}
 		}
 
-		public static string NormalizeString(string before)
-		{
-			//var after = before.ToLower()
-			//	.Replace("’s ", "s ").Replace("’n ", "n ").Replace("’t ", "t ")
-			//	.Replace(" ’", " ").Replace("’ ", " ").Replace("’", "")
-			//	.Replace("'s ", "s ").Replace("'n ", "n ").Replace("'t ", "t ")
-			//	.Replace(" '", " ").Replace("' ", " ").Replace("'", "")
-			//	.Replace("²", " ").Replace("®", " ").Replace("™", " ")
-			//	.Replace("\"", " ").Replace("“", " ").Replace("”", " ")
-			//	.Replace("/", " ").Replace("\\", " ")
-			//	.Replace("=", " ").Replace("?", " ").Replace("!", " ").Replace("&", " ").Replace(":", " ").Replace(" and ", " ").Replace("-", " ").Replace(".", " ").Replace(",", "").Replace("_", " ").Replace("(", " ").Replace(")", " ").Replace("[", " ").Replace("]", " ")
-			//	.Replace("    ", " ").Replace("   ", " ").Replace("  ", " ")
-			//	.Replace(" ", "")
-			//	.Trim();
-
-			var after = string.Empty;
-			foreach (var ch in before.ToLower().Replace("&", string.Empty).Replace(" and ", string.Empty))
-				if (char.IsLetterOrDigit(ch))
-					after += ch;
-
-			after = after.Replace('ü', 'u');
-
-			return after;
-		}
-
 		/// <summary>
 		/// https://gist.github.com/wickedshimmy/449595/cb33c2d0369551d1aa5b6ff5e6a802e21ba4ad5c
 		/// </summary>
@@ -161,57 +134,6 @@ namespace Ujeby.Tools
 			}
 
 			return matrix[len_orig, len_diff];
-		}
-
-		const string HTML_TAG_PATTERN = "<.*?>";
-
-		/// <summary>
-		/// https://stackoverflow.com/questions/4878452/remove-html-tags-in-string
-		/// </summary>
-		/// <param name="inputString"></param>
-		/// <returns></returns>
-		public static string StripHTML(string inputString)
-		{
-			if (string.IsNullOrEmpty(inputString))
-				return null;
-
-			return Regex.Replace(inputString, HTML_TAG_PATTERN, string.Empty).Trim();
-		}
-
-		public static string RemoveFromTo(string inputString, string substringFrom, string substringTo)
-		{
-			if (string.IsNullOrEmpty(inputString))
-				return null;
-
-			var startIndex = inputString.ToLower().IndexOf(substringFrom.ToLower());
-			if (startIndex < 0)
-				return inputString;
-
-			var endIndex = inputString.ToLower().LastIndexOf(substringTo.ToLower());
-			if (endIndex < 0)
-				return inputString;
-
-			return inputString.Remove(startIndex, endIndex - startIndex + substringTo.Length);
-		}
-
-		/// <summary>
-		/// split pascal/camel case string with
-		/// </summary>
-		/// <param name="s"></param>
-		/// <param name="delimiter"></param>
-		/// <returns></returns>
-		public static string SplitCase(string s, char delimiter = ' ')
-		{
-			var result = string.Empty;
-
-			for (var i = 0; i < s.Length; i++)
-			{
-				result += s[i];
-				if (i < s.Length - 1 && char.IsLower(s[i]) && char.IsUpper(s[i + 1]))
-					result += delimiter;
-			}
-
-			return result;
 		}
 	}
 }
