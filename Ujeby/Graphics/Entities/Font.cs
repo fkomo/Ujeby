@@ -61,10 +61,17 @@ namespace Ujeby.Graphics.Entities
 		}
 	}
 
-    public enum TextAlign
+    public enum HorizontalTextAlign
     {
         Left,
         Center,
         Right
     }
+
+	public enum VerticalTextAlign
+	{
+		Top,
+		Center,
+		Bottom
+	}
 }
