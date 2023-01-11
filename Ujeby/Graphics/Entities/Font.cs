@@ -33,6 +33,11 @@ namespace Ujeby.Graphics.Entities
 
         public AABBi[] CharBoxes;
 
+		public v2i GetTextSize(params TextLine[] lines)
+		{
+			return GetTextSize(new(), new(2), lines);
+		}
+
 		public v2i GetTextSize(v2i spacing, v2i scale, params TextLine[] lines)
 		{
 			var size = v2i.Zero;

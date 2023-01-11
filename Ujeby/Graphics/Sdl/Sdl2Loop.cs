@@ -132,8 +132,6 @@ namespace Ujeby.Graphics.Sdl
 		{
 		}
 
-		#region sdl2
-
 		protected void Clear(v4f color)
 		{
 			var bColor = color * 255;
@@ -303,27 +301,50 @@ namespace Ujeby.Graphics.Sdl
 			}
 		}
 
-		#endregion
-
-		protected void DrawText(v2i topLeft, v2i spacing, 
+		protected void DrawText(v2i topLeft,
 			params TextLine[] lines)
 		{
 			DrawText(
 				topLeft,
-				spacing,
+				new v2i(0),
+				new v2i(2),
 				HorizontalTextAlign.Left,
 				VerticalTextAlign.Top,
 				lines);
 		}
 
-		protected void DrawText(v2i position, v2i spacing, HorizontalTextAlign alignH, VerticalTextAlign alignV, 
+		protected void DrawText(v2i topLeft, v2i spacing, v2i scale,
+			params TextLine[] lines)
+		{
+			DrawText(
+				topLeft,
+				spacing,
+				scale,
+				HorizontalTextAlign.Left,
+				VerticalTextAlign.Top,
+				lines);
+		}
+
+		protected void DrawText(v2i topLeft, HorizontalTextAlign alignH, VerticalTextAlign alignV,
+			params TextLine[] lines)
+		{
+			DrawText(
+				topLeft,
+				new v2i(0),
+				new v2i(2),
+				alignH,
+				alignV,
+				lines);
+		}
+
+		protected void DrawText(v2i position, v2i spacing, v2i scale, HorizontalTextAlign alignH, VerticalTextAlign alignV, 
 			params TextLine[] lines)
 		{
 			DrawText(
 				Sdl2Wrapper.CurrentFont,
 				position,
 				spacing,
-				new v2i(2),
+				scale,
 				alignH,
 				alignV,
 				lines);
@@ -463,18 +484,43 @@ namespace Ujeby.Graphics.Sdl
 			}
 		}
 
-		protected void DrawGridText(v2i position, v2i spacing, 
+		protected void DrawGridText(v2i position,
 			params TextLine[] lines)
 		{
 			DrawGridText(
 				position,
-				spacing,
+				new v2i(0),
+				new v2i(2),
 				HorizontalTextAlign.Left,
 				VerticalTextAlign.Top,
 				lines);
 		}
 
-		protected void DrawGridText(v2i position, v2i spacing, HorizontalTextAlign alignH, VerticalTextAlign alignV, 
+		protected void DrawGridText(v2i position, v2i spacing, v2i scale,
+			params TextLine[] lines)
+		{
+			DrawGridText(
+				position,
+				spacing,
+				scale,
+				HorizontalTextAlign.Left,
+				VerticalTextAlign.Top,
+				lines);
+		}
+
+		protected void DrawGridText(v2i position, HorizontalTextAlign alignH, VerticalTextAlign alignV,
+			params TextLine[] lines)
+		{
+			DrawGridText(
+				position,
+				new v2i(0),
+				new v2i(2),
+				alignH,
+				alignV,
+				lines);
+		}
+
+		protected void DrawGridText(v2i position, v2i spacing, v2i scale, HorizontalTextAlign alignH, VerticalTextAlign alignV, 
 			params TextLine[] lines)
 		{
 			var gridPosition = WindowSize / 2 + Grid.Offset + position * Grid.MinorSize;
@@ -483,7 +529,7 @@ namespace Ujeby.Graphics.Sdl
 				Sdl2Wrapper.CurrentFont,
 				gridPosition,
 				spacing,
-				new v2i(2),
+				scale,
 				alignH,
 				alignV,
 				lines);
@@ -528,7 +574,7 @@ namespace Ujeby.Graphics.Sdl
 			if (printCoords)
 			{
 				var p = (MousePosition / Grid.MinorSize) * Grid.MinorSize;
-				DrawText(p + Grid.MinorSize * 2, v2i.Zero, HorizontalTextAlign.Left, VerticalTextAlign.Center, new Text($"[{(int)m.X};{(int)m.Y}]"));
+				DrawText(p + Grid.MinorSize * 2, new Text($"[{(int)m.X};{(int)m.Y}]"));
 			}
 		}
 

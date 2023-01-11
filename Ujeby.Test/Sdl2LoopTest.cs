@@ -22,7 +22,7 @@ namespace Ujeby.Test
 		{
 			DrawGrid();
 
-			DrawGridText(new(0, 0), v2i.Zero, HorizontalTextAlign.Center, VerticalTextAlign.Center,
+			DrawGridText(new(0, 0), HorizontalTextAlign.Center, VerticalTextAlign.Center,
 				new Text($"[-/-]  [+/-]") { Color = new(.5) },
 				Text.EmptyLine,
 				Text.EmptyLine,
@@ -32,7 +32,7 @@ namespace Ujeby.Test
 
 			DrawGridCircle(-15, 10, 10, border: new(.5, 0, .5, 1), fill: new(.5, 0, .5, 1));
 			DrawGridCircle(-10, -20, 5, border: new(.5, 0, .5, 1)/*, fill: new(.5, 0, .5, 1)*/);
-			DrawGridText(new(-10, -20), v2i.Zero, HorizontalTextAlign.Center, VerticalTextAlign.Center, new Text($"circle"));
+			DrawGridText(new(-10, -20), HorizontalTextAlign.Center, VerticalTextAlign.Center, new Text($"circle"));
 
 			DrawGridCell(10, -20, border: new(1, 0, 0, .8), fill: new(.5, 0, 0, .8));
 
@@ -42,7 +42,7 @@ namespace Ujeby.Test
 
 			DrawGridLine(-10, -20, -15, 10, new(1, 0, 1, 1));
 
-			DrawText(new(32, 32), new(0, 2), 
+			DrawText(new(32, 32), 
 				new Text($"{nameof(Fps)}: {(int)Fps}") { Color = new(1, 1, 0, 1) },
 				new EmptyLine(),
 				new Text($"{nameof(_frameTime)}: {_frameTime}ms"),
