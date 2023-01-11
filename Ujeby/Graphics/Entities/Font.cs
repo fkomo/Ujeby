@@ -19,6 +19,8 @@ namespace Ujeby.Graphics.Entities
 
         public string Value;
         public v4f Color = Colors.White;
+
+		public static EmptyLine EmptyLine => new();
     }
 
     public class Font
@@ -31,10 +33,8 @@ namespace Ujeby.Graphics.Entities
 
         public AABBi[] CharBoxes;
 
-		public v2i GetTextSize(v2i spacing, params TextLine[] lines)
+		public v2i GetTextSize(v2i spacing, v2i scale, params TextLine[] lines)
 		{
-			var scale = new v2i(2, 2);
-
 			var size = v2i.Zero;
 			foreach (var line in lines)
 			{
@@ -43,7 +43,7 @@ namespace Ujeby.Graphics.Entities
 					var lineLength = 0;
 					for (var i = 0; i < text.Value.Length; i++)
 					{
-						var charIndex = (int)text.Value[i] - 32;
+						var charIndex = text.Value[i] - ' ';
 						var charAabb = CharBoxes[charIndex];
 
 						lineLength += (int)(charAabb.Size.X + Spacing.X + spacing.X);
