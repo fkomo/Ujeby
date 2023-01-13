@@ -33,7 +33,7 @@
 
 	<PropertyGroup Condition="'$(Configuration)' == 'Release-nupkg'">
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<PackageOutputPath>$(SolutionDir)nuget-publish</PackageOutputPath>
+		<PackageOutputPath>$(SolutionDir)publish-nupkg</PackageOutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>
