@@ -1,1 +1,0 @@
-dotnet nuget push *.nupkg --skip-duplicate --source https://ujeby.duckdns.org:8100/nuget/dev/v3/index.json

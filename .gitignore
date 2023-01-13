@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 Deploy/
+/nuget-publish/publish.cmd
