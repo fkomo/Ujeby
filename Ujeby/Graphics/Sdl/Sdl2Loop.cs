@@ -1,4 +1,7 @@
-﻿using System.Diagnostics;
+﻿using SDL2;
+using System;
+using System.Diagnostics;
+using System.Drawing;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Interfaces;
 using Ujeby.Vectors;
@@ -85,7 +88,7 @@ namespace Ujeby.Graphics.Sdl
 				Update();
 
 				// clear backbuffer
-				Sdl2Renderer.Clear(_bgColor);
+				Clear(_bgColor);
 
 				Render();
 
@@ -129,16 +132,222 @@ namespace Ujeby.Graphics.Sdl
 		{
 		}
 
+		protected void Clear(v4f color)
+		{
+			var bColor = color * 255;
+			_ = SDL.SDL_SetRenderDrawColor(Sdl2Wrapper.RendererPtr, (byte)bColor.X, (byte)bColor.Y, (byte)bColor.Z, (byte)bColor.W);
+			_ = SDL.SDL_RenderClear(Sdl2Wrapper.RendererPtr);
+		}
+
 		protected void DrawRect(int x, int y, int w, int h,
 			v4f? border = null, v4f? fill = null)
 		{
-			Sdl2Renderer.DrawRect(
-				x,
-				y,
-				w,
-				h,
-				border: border,
-				fill: fill);
+			var rect = new SDL.SDL_Rect
+			{
+				x = x,
+				y = y,
+				w = w,
+				h = h,
+			};
+
+			if (fill.HasValue)
+			{
+				var fColor = fill.Value * 255;
+				_ = SDL.SDL_SetRenderDrawColor(Sdl2Wrapper.RendererPtr, (byte)fColor.X, (byte)fColor.Y, (byte)fColor.Z, (byte)fColor.W);
+				_ = SDL.SDL_RenderFillRect(Sdl2Wrapper.RendererPtr, ref rect);
+			}
+
+			if (border.HasValue)
+			{
+				var bColor = border.Value * 255;
+				_ = SDL.SDL_SetRenderDrawColor(Sdl2Wrapper.RendererPtr, (byte)bColor.X, (byte)bColor.Y, (byte)bColor.Z, (byte)bColor.W);
+				_ = SDL.SDL_RenderDrawRect(Sdl2Wrapper.RendererPtr, ref rect);
+			}
+		}
+
+		protected void DrawLine(int x1, int y1, int x2, int y2, v4f color)
+		{
+			var bColor = color * 255;
+			_ = SDL.SDL_SetRenderDrawColor(Sdl2Wrapper.RendererPtr, (byte)bColor.X, (byte)bColor.Y, (byte)bColor.Z, (byte)bColor.W);
+			_ = SDL.SDL_RenderDrawLine(Sdl2Wrapper.RendererPtr, x1, y1, x2, y2);
+		}
+
+		protected void DrawCircle(int cx, int cy, int radius, 
+			v4f? border = null, v4f? fill = null)
+		{
+			// TODO DrawCircle fill
+
+			if (fill.HasValue)
+			{
+				var fColor = fill.Value * 255;
+				_ = SDL.SDL_SetRenderDrawColor(Sdl2Wrapper.RendererPtr, (byte)fColor.X, (byte)fColor.Y, (byte)fColor.Z, (byte)fColor.W);
+
+				for (int w = 0; w < radius * 2; w++)
+				{
+					for (int h = 0; h < radius * 2; h++)
+					{
+						int dx = radius - w; // horizontal offset
+						int dy = radius - h; // vertical offset
+						if ((dx * dx + dy * dy) <= (radius * radius))
+						{
+							_ = SDL.SDL_RenderDrawPoint(Sdl2Wrapper.RendererPtr, cx + dx, cy + dy);
+						}
+					}
+				}
+			}
+
+			if (border.HasValue)
+			{
+				var bColor = border.Value * 255;
+				_ = SDL.SDL_SetRenderDrawColor(Sdl2Wrapper.RendererPtr, (byte)bColor.X, (byte)bColor.Y, (byte)bColor.Z, (byte)bColor.W);
+			}
+
+			var diameter = radius + radius;
+			var x = radius - 1;
+			var y = 0;
+			var tx = 1;
+			var ty = 1;
+			var error = tx - diameter;
+			while (x >= y)
+			{
+				//  Each of the following renders an octant of the circle
+				_ = SDL.SDL_RenderDrawPoint(Sdl2Wrapper.RendererPtr, cx + x, cy - y);
+				_ = SDL.SDL_RenderDrawPoint(Sdl2Wrapper.RendererPtr, cx + x, cy + y);
+				_ = SDL.SDL_RenderDrawPoint(Sdl2Wrapper.RendererPtr, cx - x, cy - y);
+				_ = SDL.SDL_RenderDrawPoint(Sdl2Wrapper.RendererPtr, cx - x, cy + y);
+				_ = SDL.SDL_RenderDrawPoint(Sdl2Wrapper.RendererPtr, cx + y, cy - x);
+				_ = SDL.SDL_RenderDrawPoint(Sdl2Wrapper.RendererPtr, cx + y, cy + x);
+				_ = SDL.SDL_RenderDrawPoint(Sdl2Wrapper.RendererPtr, cx - y, cy - x);
+				_ = SDL.SDL_RenderDrawPoint(Sdl2Wrapper.RendererPtr, cx - y, cy + x);
+
+				if (error <= 0)
+				{
+					++y;
+					error += ty;
+					ty += 2;
+				}
+
+				if (error > 0)
+				{
+					--x;
+					tx += 2;
+					error += (tx - diameter);
+				}
+			}
+		}
+
+		protected void DrawText(Font font, v2i position, v2i spacing, v2i scale, HorizontalTextAlign alignH, VerticalTextAlign alignV,
+			params TextLine[] lines)
+		{
+			var textSize = font.GetTextSize(spacing, scale, lines);
+			var align = new v2i();
+			switch (alignH)
+			{
+				case HorizontalTextAlign.Center: align.X = textSize.X / 2; break;
+				case HorizontalTextAlign.Right: align.X = textSize.X; break;
+				case HorizontalTextAlign.Left:
+				default:
+					break;
+			}
+			switch (alignV)
+			{
+				case VerticalTextAlign.Center: align.Y = textSize.Y / 2; break;
+				case VerticalTextAlign.Bottom: /*align.Y = -textSize.Y; break;*/
+				case VerticalTextAlign.Top: /*align.Y = textSize.Y; break;*/
+				default:
+					break;
+			}
+			position -= align;
+
+			var fontSprite = SpriteCache.Get(Sdl2Wrapper.CurrentFont.SpriteId);
+
+			var sourceRect = new SDL.SDL_Rect();
+			var destinationRect = new SDL.SDL_Rect();
+
+			var textPosition = position;
+			foreach (var line in lines)
+			{
+				if (line is Text text)
+				{
+					var color = text.Color * 255;
+					_ = SDL.SDL_SetTextureColorMod(fontSprite.TexturePtr, (byte)color.X, (byte)color.Y, (byte)color.Z);
+
+					for (var i = 0; i < text.Value.Length; i++)
+					{
+						var charIndex = (int)text.Value[i] - 32;
+						var charAabb = font.CharBoxes[charIndex];
+
+						sourceRect.x = (int)(font.CharSize.X * charIndex + charAabb.Min.X);
+						sourceRect.y = (int)charAabb.Min.Y;
+						sourceRect.w = (int)charAabb.Size.X;
+						sourceRect.h = (int)charAabb.Size.Y;
+
+						destinationRect.x = (int)(textPosition.X);
+						destinationRect.y = (int)(textPosition.Y);
+						destinationRect.w = (int)(charAabb.Size.X * scale.X);
+						destinationRect.h = (int)(charAabb.Size.Y * scale.Y);
+
+						_ = SDL.SDL_RenderCopy(Sdl2Wrapper.RendererPtr, fontSprite.TexturePtr, ref sourceRect, ref destinationRect);
+						textPosition.X += (charAabb.Size.X + font.Spacing.X + spacing.X) * scale.X;
+					}
+
+					textPosition.Y += (font.CharSize.Y + font.Spacing.Y + spacing.Y) * scale.Y;
+					textPosition.X = position.X;
+				}
+				else if (line is EmptyLine)
+				{
+					textPosition.Y += (font.CharSize.Y + font.Spacing.Y + spacing.Y) * scale.Y;
+				}
+			}
+		}
+
+		protected void DrawText(v2i topLeft,
+			params TextLine[] lines)
+		{
+			DrawText(
+				topLeft,
+				new v2i(0),
+				new v2i(2),
+				HorizontalTextAlign.Left,
+				VerticalTextAlign.Top,
+				lines);
+		}
+
+		protected void DrawText(v2i topLeft, v2i spacing, v2i scale,
+			params TextLine[] lines)
+		{
+			DrawText(
+				topLeft,
+				spacing,
+				scale,
+				HorizontalTextAlign.Left,
+				VerticalTextAlign.Top,
+				lines);
+		}
+
+		protected void DrawText(v2i topLeft, HorizontalTextAlign alignH, VerticalTextAlign alignV,
+			params TextLine[] lines)
+		{
+			DrawText(
+				topLeft,
+				new v2i(0),
+				new v2i(2),
+				alignH,
+				alignV,
+				lines);
+		}
+
+		protected void DrawText(v2i position, v2i spacing, v2i scale, HorizontalTextAlign alignH, VerticalTextAlign alignV, 
+			params TextLine[] lines)
+		{
+			DrawText(
+				Sdl2Wrapper.CurrentFont,
+				position,
+				spacing,
+				scale,
+				alignH,
+				alignV,
+				lines);
 		}
 
 		protected void DrawGridCell(int x, int y, 
@@ -153,6 +362,12 @@ namespace Ujeby.Graphics.Sdl
 				fill: fill);
 		}
 
+		protected void DrawGridCell(v2i p,
+			v4f? border = null, v4f? fill = null)
+		{
+			DrawGridCell((int)p.X, (int)p.Y, border: border, fill: fill);
+		}
+
 		protected void DrawGridRect(int x, int y, int w, int h,
 			v4f? border = null, v4f? fill = null)
 		{
@@ -165,14 +380,42 @@ namespace Ujeby.Graphics.Sdl
 				fill: fill);
 		}
 
+		protected void DrawGridRect(v2i topLeft, v2i size,
+			v4f? border = null, v4f? fill = null)
+		{
+			DrawGridRect((int)topLeft.X, (int)topLeft.Y, (int)size.X, (int)size.Y, border: border, fill: fill);
+		}
+
+		protected void DrawGridCircle(int x, int y, int radius,
+			v4f? border = null, v4f? fill = null)
+		{
+			DrawCircle(
+				(int)(WindowSize.X / 2 + Grid.Offset.X + x * Grid.MinorSize),
+				(int)(WindowSize.Y / 2 + Grid.Offset.Y + y * Grid.MinorSize),
+				radius * Grid.MinorSize, 
+				border: border,
+				fill: fill);
+		}
+
+		protected void DrawGridCircle(v2i center, int radius, 
+			v4f? border = null, v4f? fill = null)
+		{
+			DrawGridCircle((int)center.X, (int)center.Y, radius, border: border, fill: fill);
+		}
+
 		protected void DrawGridLine(int x1, int y1, int x2, int y2, v4f color)
 		{
-			Sdl2Renderer.DrawLine(
+			DrawLine(
 				(int)(WindowSize.X / 2 + Grid.Offset.X + x1 * Grid.MinorSize),
 				(int)(WindowSize.Y / 2 + Grid.Offset.Y + y1 * Grid.MinorSize),
 				(int)(WindowSize.X / 2 + Grid.Offset.X + x2 * Grid.MinorSize),
 				(int)(WindowSize.Y / 2 + Grid.Offset.Y + y2 * Grid.MinorSize),
 				color);
+		}
+
+		protected void DrawGridLine(v2i a, v2i b, v4f color)
+		{
+			DrawLine((int)a.X, (int)a.Y, (int)b.X, (int)b.Y, color);
 		}
 
 		protected void DrawGrid(
@@ -184,19 +427,19 @@ namespace Ujeby.Graphics.Sdl
 			if (showMinor)
 			{
 				for (var ix = 1; origin.X + ix * size < WindowSize.X; ix++)
-					Sdl2Renderer.DrawLine((int)origin.X + ix * size, 0, (int)origin.X + ix * size, (int)WindowSize.Y, Grid.MinorColor);
+					DrawLine((int)origin.X + ix * size, 0, (int)origin.X + ix * size, (int)WindowSize.Y, Grid.MinorColor);
 
 				for (var ix = 1; origin.X - ix * size >= 0; ix++)
-					Sdl2Renderer.DrawLine((int)origin.X - ix * size, 0, (int)origin.X - ix * size, (int)WindowSize.Y, Grid.MinorColor);
+					DrawLine((int)origin.X - ix * size, 0, (int)origin.X - ix * size, (int)WindowSize.Y, Grid.MinorColor);
 
 				for (var iy = 1; origin.Y + iy * size < WindowSize.Y; iy++)
-					Sdl2Renderer.DrawLine(0, (int)origin.Y + iy * size, (int)WindowSize.X, (int)origin.Y + iy * size, Grid.MinorColor);
+					DrawLine(0, (int)origin.Y + iy * size, (int)WindowSize.X, (int)origin.Y + iy * size, Grid.MinorColor);
 
 				for (var iy = 1; origin.Y - iy * size >= 0; iy++)
-					Sdl2Renderer.DrawLine(0, (int)origin.Y - iy * size, (int)WindowSize.X, (int)origin.Y - iy * size, Grid.MinorColor);
+					DrawLine(0, (int)origin.Y - iy * size, (int)WindowSize.X, (int)origin.Y - iy * size, Grid.MinorColor);
 
-				Sdl2Renderer.DrawLine((int)origin.X, 0, (int)origin.X, (int)WindowSize.Y, Grid.MinorColor);
-				Sdl2Renderer.DrawLine(0, (int)origin.Y, (int)WindowSize.X, (int)origin.Y, Grid.MinorColor);
+				DrawLine((int)origin.X, 0, (int)origin.X, (int)WindowSize.Y, Grid.MinorColor);
+				DrawLine(0, (int)origin.Y, (int)WindowSize.X, (int)origin.Y, Grid.MinorColor);
 			}
 
 			if (showMajor)
@@ -206,7 +449,7 @@ namespace Ujeby.Graphics.Sdl
 					if (ix % Grid.MajorSize != 0)
 						continue;
 
-					Sdl2Renderer.DrawLine((int)origin.X + ix * size, 0, (int)origin.X + ix * size, (int)WindowSize.Y, Grid.MajorColor);
+					DrawLine((int)origin.X + ix * size, 0, (int)origin.X + ix * size, (int)WindowSize.Y, Grid.MajorColor);
 				}
 
 				for (var ix = 1; origin.X - ix * size >= 0; ix++)
@@ -214,7 +457,7 @@ namespace Ujeby.Graphics.Sdl
 					if (ix % Grid.MajorSize != 0)
 						continue;
 
-					Sdl2Renderer.DrawLine((int)origin.X - ix * size, 0, (int)origin.X - ix * size, (int)WindowSize.Y, Grid.MajorColor);
+					DrawLine((int)origin.X - ix * size, 0, (int)origin.X - ix * size, (int)WindowSize.Y, Grid.MajorColor);
 				}
 
 				for (var iy = 1; origin.Y + iy * size < WindowSize.Y; iy++)
@@ -222,7 +465,7 @@ namespace Ujeby.Graphics.Sdl
 					if (iy % Grid.MajorSize != 0)
 						continue;
 
-					Sdl2Renderer.DrawLine(0, (int)origin.Y + iy * size, (int)WindowSize.X, (int)origin.Y + iy * size, Grid.MajorColor);
+					DrawLine(0, (int)origin.Y + iy * size, (int)WindowSize.X, (int)origin.Y + iy * size, Grid.MajorColor);
 				}
 
 				for (var iy = 1; origin.Y - iy * size >= 0; iy++)
@@ -230,15 +473,66 @@ namespace Ujeby.Graphics.Sdl
 					if (iy % Grid.MajorSize != 0)
 						continue;
 
-					Sdl2Renderer.DrawLine(0, (int)origin.Y - iy * size, (int)WindowSize.X, (int)origin.Y - iy * size, Grid.MajorColor);
+					DrawLine(0, (int)origin.Y - iy * size, (int)WindowSize.X, (int)origin.Y - iy * size, Grid.MajorColor);
 				}
 			}
 
 			if (showAxis)
 			{
-				Sdl2Renderer.DrawLine((int)origin.X, 0, (int)origin.X, (int)WindowSize.Y, Grid.AxisColor);
-				Sdl2Renderer.DrawLine(0, (int)origin.Y, (int)WindowSize.X, (int)origin.Y, Grid.AxisColor);
+				DrawLine((int)origin.X, 0, (int)origin.X, (int)WindowSize.Y, Grid.AxisColor);
+				DrawLine(0, (int)origin.Y, (int)WindowSize.X, (int)origin.Y, Grid.AxisColor);
 			}
+		}
+
+		protected void DrawGridText(v2i position,
+			params TextLine[] lines)
+		{
+			DrawGridText(
+				position,
+				new v2i(0),
+				new v2i(2),
+				HorizontalTextAlign.Left,
+				VerticalTextAlign.Top,
+				lines);
+		}
+
+		protected void DrawGridText(v2i position, v2i spacing, v2i scale,
+			params TextLine[] lines)
+		{
+			DrawGridText(
+				position,
+				spacing,
+				scale,
+				HorizontalTextAlign.Left,
+				VerticalTextAlign.Top,
+				lines);
+		}
+
+		protected void DrawGridText(v2i position, HorizontalTextAlign alignH, VerticalTextAlign alignV,
+			params TextLine[] lines)
+		{
+			DrawGridText(
+				position,
+				new v2i(0),
+				new v2i(2),
+				alignH,
+				alignV,
+				lines);
+		}
+
+		protected void DrawGridText(v2i position, v2i spacing, v2i scale, HorizontalTextAlign alignH, VerticalTextAlign alignV, 
+			params TextLine[] lines)
+		{
+			var gridPosition = WindowSize / 2 + Grid.Offset + position * Grid.MinorSize;
+
+			DrawText(
+				Sdl2Wrapper.CurrentFont,
+				gridPosition,
+				spacing,
+				scale,
+				alignH,
+				alignV,
+				lines);
 		}
 
 		protected void DrawGridMouseCursor(
@@ -280,18 +574,8 @@ namespace Ujeby.Graphics.Sdl
 			if (printCoords)
 			{
 				var p = (MousePosition / Grid.MinorSize) * Grid.MinorSize;
-				DrawText(p + Grid.MinorSize * 2, v2i.Zero, new Text($"[{(int)m.X};{(int)m.Y}]"));
+				DrawText(p + Grid.MinorSize * 2, new Text($"[{(int)m.X};{(int)m.Y}]"));
 			}
-		}
-
-		protected void DrawText(v2i position, v2i spacing, params TextLine[] lines)
-		{
-			Sdl2Renderer.DrawText(
-				Sdl2Wrapper.CurrentFont,
-				position,
-				spacing,
-				new v2i(2),
-				lines);
 		}
 
 		protected void ShowCursor(
