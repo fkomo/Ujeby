@@ -50,6 +50,10 @@
 			Y = y;
 		}
 
+		public v2i(long[] xy) : this(xy[0], xy[1])
+		{
+		}
+
 		public v2i(v2i v) : this(v.X, v.Y)
 		{
 		}

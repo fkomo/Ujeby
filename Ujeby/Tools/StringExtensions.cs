@@ -72,16 +72,23 @@ namespace Ujeby.Tools
 		public static long[] ToNumArray(this string s)
 		{
 			var sb = new StringBuilder();
+			var result = new List<long>();
 			for (var i = 0; i < s.Length; i++)
-				if (char.IsDigit(s[i]))
+			{
+				if (char.IsDigit(s[i]) || s[i] == '-')
+				{
 					sb.Append(s[i]);
-				else
-					sb.Append(' ');
+					for (++i; i < s.Length && char.IsDigit(s[i]); i++)
+						sb.Append(s[i]);
+				}
 
-			return sb.ToString()
-				.Split(' ', StringSplitOptions.RemoveEmptyEntries)
-				.Select(i => long.Parse(i))
-				.ToArray();
+				if (long.TryParse(sb.ToString(), out long l))
+					result.Add(l);
+
+				sb.Clear();
+			}
+
+			return result.ToArray();
 		}
 
 		/// <summary>
