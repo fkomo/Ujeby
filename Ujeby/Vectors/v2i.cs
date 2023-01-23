@@ -86,22 +86,16 @@
 		public static bool operator ==(v2i a, v2i b) => a.X == b.X && a.Y == b.Y;
 		public static bool operator !=(v2i a, v2i b) => !(a == b);
 
-		/// <summary>
-		/// Manhattan length
-		/// </summary>
-		/// <returns></returns>
-		public long ManhLength() => X + Y;
-		public long Length() => (long)Math.Sqrt(X * X + Y * Y);
+		public long Length() => (long)Math.Sqrt(Length2());
+		public long Length2() => Math.Abs(X * X) + Math.Abs(Y * Y);
 		public long Area() => X * Y;
 		public v2i Abs() => new(Math.Abs(X), Math.Abs(Y));
 		public v2i Inv() => new(-X, -Y);
 
-		/// <summary>
-		/// Manhattan distance
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
+		/// <summary>Manhattan length</summary>
+		public long ManhLength() => X + Y;
+
+		/// <summary>Manhattan distance</summary>
 		public static long ManhDistance(v2i a, v2i b) => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
 
 		public static v2i Min(v2i v1, v2i v2) => new(Math.Min(v1.X, v2.X), Math.Min(v1.Y, v2.Y));

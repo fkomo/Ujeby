@@ -39,6 +39,10 @@
 		/// <returns></returns>
 		public static long BaseToDec(string value, string baseString = "01", int offset = 0)
 		{
+			if (baseString.Length == 2 && offset == 0)
+				// faster
+				return Convert.ToInt32(value.Replace(baseString[0], '0').Replace(baseString[1], '1'), 2);
+
 			long pow = 1;
 			long result = 0;
 			foreach (var c in value.Reverse())

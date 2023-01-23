@@ -1,7 +1,5 @@
 ﻿using SDL2;
-using System;
 using System.Diagnostics;
-using System.Drawing;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Interfaces;
 using Ujeby.Vectors;

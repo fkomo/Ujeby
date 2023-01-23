@@ -1,8 +1,6 @@
-﻿using Ujeby.Vectors;
-
-namespace Ujeby.Graphics.Entities
+﻿namespace Ujeby.Vectors
 {
-	public struct AABBi
+	public struct AABox2i
 	{
 		public v2i Min { get; private set; }
 		public v2i Max { get; private set; }
@@ -17,9 +15,9 @@ namespace Ujeby.Graphics.Entities
 		public long Right => Max.X;
 
 		public override string ToString() => $"{ Min }-{ Max }";
-		public static AABBi operator +(AABBi bb, v2i v) => new(bb.Min + v, bb.Max + v);
+		public static AABox2i operator +(AABox2i bb, v2i v) => new(bb.Min + v, bb.Max + v);
 
-		public AABBi(v2i min, v2i max)
+		public AABox2i(v2i min, v2i max)
 		{
 			Min = min;
 			Max = max;

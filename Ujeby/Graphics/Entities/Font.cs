@@ -31,7 +31,7 @@ namespace Ujeby.Graphics.Entities
         public v2i CharSize;
         public v2i Spacing;
 
-        public AABBi[] CharBoxes;
+        public AABox2i[] CharBoxes;
 
 		public v2i GetTextSize(params TextLine[] lines)
 		{

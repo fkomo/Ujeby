@@ -17,6 +17,13 @@
 	  <None Remove="Content\Fonts\font-5x7-data.png" />
 	  <None Remove="Content\Fonts\font-5x7.ase" />
 	  <None Remove="Content\Fonts\font-5x7.png" />
+	  <None Remove="ffmpeg.config.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="ffmpeg.config.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -37,6 +44,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="FFMpegCore" Version="4.8.0" />
+		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
 		<PackageReference Include="OpenTK" Version="4.7.5" />
 		<PackageReference Include="SDL2-CS.NetCore" Version="2.0.8" />
 	</ItemGroup>
