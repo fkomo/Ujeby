@@ -2,6 +2,7 @@
 using System;
 using Ujeby.Graphics.Sdl;
 using Ujeby.Test.Benchmarks;
+using Ujeby.Tools;
 using Ujeby.Vectors;
 
 namespace Ujeby.Test

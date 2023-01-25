@@ -32,11 +32,8 @@
 		<ProjectReference Include="..\Ujeby\Ujeby.csproj" />
 	</ItemGroup>
 
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
-		<Exec Command="xcopy /Y /R &quot;$(OutDir)Ujeby.*&quot; &quot;$(SolutionDir)publish-dll&quot;" />
-	</Target>
-
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="xcopy /Y /R $(OutDir)Ujeby.* $(SolutionDir)publish-dll" />
 		<Exec Command="copy $(SolutionDir)3rd\SDL2\*.dll $(OutDir)" />
 	</Target>
 

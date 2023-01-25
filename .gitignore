@@ -363,7 +363,6 @@ MigrationBackup/
 FodyWeavers.xsd
 
 Deploy/
-/nuget-publish/publish.cmd
 /publish-dll/Ujeby.Test.runtimeconfig.json
 /publish-dll/Ujeby.Test.exe
 /publish-dll/Ujeby.Test.dll
@@ -374,3 +373,4 @@ Deploy/
 /publish-dll/Ujeby.Blazor.Base.dll
 /publish-dll/Ujeby.Api.Client.Base.dll
 /publish-dll/Ujeby.Api.Base.dll
+/publish-nupkg/publish.cmd

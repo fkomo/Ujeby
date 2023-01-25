@@ -62,7 +62,7 @@ namespace Ujeby.Graphics
 			{
 				font.DataSpriteId = dataSprite.Id;
 
-				font.CharBoxes = new AABBi[(int)(dataSprite.Size.X / font.CharSize.X)];
+				font.CharBoxes = new AABox2i[(int)(dataSprite.Size.X / font.CharSize.X)];
 				for (var ci = 0; ci < dataSprite.Size.X; ci += (int)font.CharSize.X)
 				{
 					var min = new v2i(font.CharSize.X, font.CharSize.Y);
@@ -83,7 +83,7 @@ namespace Ujeby.Graphics
 						}
 					}
 
-					font.CharBoxes[(int)(ci / font.CharSize.X)] = new AABBi(min, max);
+					font.CharBoxes[(int)(ci / font.CharSize.X)] = new AABox2i(min, max);
 				}
 			}
 
