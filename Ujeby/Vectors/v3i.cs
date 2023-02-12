@@ -92,6 +92,7 @@ namespace Ujeby.Vectors
 		public static v3i operator /(v3i a, v3i b) => new(a.X / b.X, a.Y / b.Y, a.Z / b.Z);
 		public static v3i operator +(v3i a, v2i b) => new(a.X + b.X, a.Y + b.Y, a.Z);
 		public static v3i operator +(v3i a, long b) => new(a.X + b, a.Y + b, a.Z + b);
+		public static v3i operator -(v3i a, long b) => a + (-b);
 
 		public static bool operator ==(v3i a, v3i b) => a.X == b.X && a.Y == b.Y && a.Z == b.Z;
 		public static bool operator !=(v3i a, v3i b) => !(a == b);

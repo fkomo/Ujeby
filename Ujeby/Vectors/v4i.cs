@@ -74,14 +74,15 @@
 		public static v4i operator /(v4i a, v4i b) => new(a.X / b.X, a.Y / b.Y, a.Z / b.Z, a.W / b.W);
 		public static v4i operator +(v4i a, v2i b) => new(a.X + b.X, a.Y + b.Y, a.Z, a.W);
 		public static v4i operator +(v4i a, v3i b) => new(a.X + b.X, a.Y + b.Y, a.Z + b.Z, a.W);
-
-		public static implicit operator v2f(v4i v) => new(v.X, v.Y);
-
-		public static implicit operator v2i(v4i v) => new(v.X, v.Y);
-		public static implicit operator v3i(v4i v) => new(v.X, v.Y, v.Z);
+		public static v4i operator +(v4i a, long b) => new(a.X + b, a.Y + b, a.Z + b, a.W + b);
+		public static v4i operator -(v4i a, long b) => a + (-b);
 
 		public static bool operator ==(v4i a, v4i b) => a.X == b.X && a.Y == b.Y && a.Z == b.Z && a.W == b.W;
 		public static bool operator !=(v4i a, v4i b) => !(a == b);
+
+		public static implicit operator v2f(v4i v) => new(v.X, v.Y);
+		public static implicit operator v2i(v4i v) => new(v.X, v.Y);
+		public static implicit operator v3i(v4i v) => new(v.X, v.Y, v.Z);
 
 		public v4i Abs() => new(Math.Abs(X), Math.Abs(Y), Math.Abs(Z), Math.Abs(W));
 		public v2i ToV2i() => new(X, Y);
