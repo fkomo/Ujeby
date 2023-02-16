@@ -198,6 +198,13 @@ namespace Ujeby.Tools.StringExtensions
 			return i - 1;
 		}
 		
+		/// <summary>
+		/// returns index of corresponding opening bracket (with nesting in mind)
+		/// </summary>
+		/// <param name="s"></param>
+		/// <param name="closingBracketIndex"></param>
+		/// <param name="brackets"></param>
+		/// <returns></returns>
 		public static int IndexOfOpeningBracket(this string s, int closingBracketIndex,
 			string brackets = "()")
 		{
