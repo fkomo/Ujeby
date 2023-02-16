@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Ujeby.Tools
+namespace Ujeby.Tools.StringExtensions
 {
 	public static class StringExtensions
 	{
@@ -173,6 +173,29 @@ namespace Ujeby.Tools
 			after = after.Replace('ü', 'u');
 
 			return after;
+		}
+
+		/// <summary>
+		/// returns index of corresponding closing bracket (with nesting in mind)
+		/// </summary>
+		/// <param name="s"></param>
+		/// <param name="startingBracketIndex"></param>
+		/// <param name="brackets"></param>
+		/// <returns></returns>
+		public static int IndexOfClosingBracket(this string s, int startingBracketIndex,
+			string brackets = "()")
+		{
+			var i = startingBracketIndex + 1;
+			for (var nest = 1; nest > 0; i++)
+			{
+				if (s[i] == brackets[0])
+					nest++;
+
+				else if (s[i] == brackets[1])
+					nest--;
+			}
+
+			return i - 1;
 		}
 	}
 }

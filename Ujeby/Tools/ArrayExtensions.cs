@@ -1,4 +1,4 @@
-﻿namespace Ujeby.Tools
+﻿namespace Ujeby.Tools.ArrayExtensions
 {
 	public static class ArrayExtensions
 	{
