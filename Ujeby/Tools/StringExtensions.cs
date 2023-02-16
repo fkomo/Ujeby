@@ -179,13 +179,13 @@ namespace Ujeby.Tools.StringExtensions
 		/// returns index of corresponding closing bracket (with nesting in mind)
 		/// </summary>
 		/// <param name="s"></param>
-		/// <param name="startingBracketIndex"></param>
+		/// <param name="openingBracketIndex"></param>
 		/// <param name="brackets"></param>
 		/// <returns></returns>
-		public static int IndexOfClosingBracket(this string s, int startingBracketIndex,
+		public static int IndexOfClosingBracket(this string s, int openingBracketIndex,
 			string brackets = "()")
 		{
-			var i = startingBracketIndex + 1;
+			var i = openingBracketIndex + 1;
 			for (var nest = 1; nest > 0; i++)
 			{
 				if (s[i] == brackets[0])
@@ -196,6 +196,22 @@ namespace Ujeby.Tools.StringExtensions
 			}
 
 			return i - 1;
+		}
+		
+		public static int IndexOfOpeningBracket(this string s, int closingBracketIndex,
+			string brackets = "()")
+		{
+			var i = closingBracketIndex - 1;
+			for (var nest = 1; nest > 0; i--)
+			{
+				if (s[i] == brackets[1])
+					nest++;
+
+				else if (s[i] == brackets[0])
+					nest--;
+			}
+
+			return i + 1;
 		}
 	}
 }
