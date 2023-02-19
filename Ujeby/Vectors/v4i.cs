@@ -62,6 +62,14 @@
 		{
 		}
 
+		public v4i(long[] xyzw) : this(xyzw[0], xyzw[1], xyzw[2], xyzw[3])
+		{
+		}
+
+		public v4i(v2i xy, v2i zw) : this(xy[0], xy[1], zw[0], zw[1])
+		{
+		}
+
 		public override string ToString() => $"[{X};{Y};{Z};{W}]";
 		public override bool Equals(object obj) => obj is v4i v && this == v;
 		public override int GetHashCode() => X.GetHashCode() ^ Y.GetHashCode() ^ Z.GetHashCode() ^ W.GetHashCode();
@@ -87,6 +95,7 @@
 		public v4i Abs() => new(Math.Abs(X), Math.Abs(Y), Math.Abs(Z), Math.Abs(W));
 		public v2i ToV2i() => new(X, Y);
 		public v3i ToV3i() => new(X, Y, Z);
+		public long[] ToArray() => new[] { X, Y, Z };
 
 		public static v4i Min(v4i v1, v4i v2) => new(Math.Min(v1.X, v2.X), Math.Min(v1.Y, v2.Y), Math.Min(v1.Z, v2.Z), Math.Min(v1.W, v2.W));
 		public static v4i Max(v4i v1, v4i v2) => new(Math.Max(v1.X, v2.X), Math.Max(v1.Y, v2.Y), Math.Max(v1.Z, v2.Z), Math.Max(v1.W, v2.W));

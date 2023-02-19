@@ -30,5 +30,22 @@
 
 			return result.ToArray();
 		}
+
+		/// <summary>
+		/// returns array of pascal-case strings
+		/// </summary>
+		/// <param name="a"></param>
+		/// <returns></returns>
+		public static string[] ToPascalCase(this string[] a)
+		{
+			if (a == null)
+				return a;
+
+			for (var i = 0; i < a.Length; i++)
+				if (char.IsLower(a[i][0]))
+					a[i] = char.ToUpper(a[i][0]) + a[i][1..];
+
+			return a;
+		}
 	}
 }

@@ -220,5 +220,45 @@ namespace Ujeby.Tools.StringExtensions
 
 			return i + 1;
 		}
+
+		/// <summary>
+		/// returns tag defined by start/end
+		/// </summary>
+		/// <param name="s"></param>
+		/// <param name="startTag"></param>
+		/// <param name="endTag"></param>
+		/// <returns></returns>
+		public static string GetTag(this string s, string startTag, string endTag)
+		{
+			var regexp = $"{startTag}(.*?){endTag}";
+			var match = Regex.Match(s, regexp);
+
+			return match.Success ? match.Value : null;
+		}
+
+		/// <summary>
+		/// returns only letters and digits from string
+		/// </summary>
+		/// <param name="s"></param>
+		/// <returns></returns>
+		public static string LettersOrDigitsOnly(this string s)
+			=> s == null ? s : new(s.Where(c => char.IsLetterOrDigit(c)).ToArray());
+
+		/// <summary>
+		/// remove tags from string (defined by start/end tag)
+		/// </summary>
+		/// <param name="s"></param>
+		/// <param name="tags"></param>
+		/// <returns></returns>
+		public static string StripTags(this string s, params (string Start, string End)[] tags)
+		{
+			if (string.IsNullOrEmpty(s))
+				return null;
+
+			foreach (var tag in tags)
+				s = Regex.Replace(s, $"{tag.Start}.*?{tag.End}", string.Empty);
+
+			return s;
+		}
 	}
 }

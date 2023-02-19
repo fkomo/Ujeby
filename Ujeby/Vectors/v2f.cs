@@ -76,6 +76,7 @@
 		public v2f Max(v2f v) => new(Math.Max(X, v.X), Math.Max(Y, v.Y));
 		public v2i Trunc() => new((long)X, (long)Y);
 		public v2i Round() => new((long)Math.Round(X), (long)Math.Round(Y));
+		public double[] ToArray() => new[] { X, Y };
 
 		public static double Dot(v2f v1, v2f v2) => v1.X * v2.X + v1.Y * v2.Y;
 		public static v2f Min(v2f v1, v2f v2) => new(Math.Min(v1.X, v2.X), Math.Min(v1.Y, v2.Y));
