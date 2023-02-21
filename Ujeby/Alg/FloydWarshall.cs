@@ -3,9 +3,11 @@
 	public class FloydWarshall
 	{
 		/// <summary>
+		/// computes shortest path between every vertex pair
+		/// 
 		/// https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm
 		/// </summary>
-		/// <param name="dist"></param>
+		/// <param name="dist">distances between places: NxN</param>
 		/// <returns></returns>
 		public static int[,] ShortestPath(int[,] dist)
 		{

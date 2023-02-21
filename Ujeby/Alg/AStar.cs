@@ -3,6 +3,8 @@
 namespace Ujeby.Alg
 {
 	/// <summary>
+	/// finds shortest path between 2 vertices of weighted graph
+	/// 
 	/// https://en.wikipedia.org/wiki/A*_search_algorithm
 	/// </summary>
 	public class AStar
