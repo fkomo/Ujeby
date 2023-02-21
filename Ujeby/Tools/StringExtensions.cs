@@ -176,49 +176,69 @@ namespace Ujeby.Tools.StringExtensions
 		}
 
 		/// <summary>
-		/// returns index of corresponding closing bracket (with nesting in mind)
-		/// </summary>
-		/// <param name="s"></param>
-		/// <param name="openingBracketIndex"></param>
-		/// <param name="brackets"></param>
-		/// <returns></returns>
-		public static int IndexOfClosingBracket(this string s, int openingBracketIndex,
-			string brackets = "()")
-		{
-			var i = openingBracketIndex + 1;
-			for (var nest = 1; nest > 0; i++)
-			{
-				if (s[i] == brackets[0])
-					nest++;
-
-				else if (s[i] == brackets[1])
-					nest--;
-			}
-
-			return i - 1;
-		}
-		
-		/// <summary>
 		/// returns index of corresponding opening bracket (with nesting in mind)
 		/// </summary>
 		/// <param name="s"></param>
 		/// <param name="closingBracketIndex"></param>
-		/// <param name="brackets"></param>
+		/// <param name="openingBrackets"></param>
+		/// <param name="closingBrackets"></param>
 		/// <returns></returns>
-		public static int IndexOfOpeningBracket(this string s, int closingBracketIndex,
-			string brackets = "()")
+		public static int IndexOfOpeningBracket(this string s, int closingBracketIndex, 
+			string openingBrackets = "{([", string closingBrackets = "})]")
 		{
-			var i = closingBracketIndex - 1;
-			for (var nest = 1; nest > 0; i--)
-			{
-				if (s[i] == brackets[1])
-					nest++;
+			var i = closingBracketIndex;
+			var nest = new int[openingBrackets.Length];
 
-				else if (s[i] == brackets[0])
-					nest--;
+			do
+			{
+				var nCloseId = closingBrackets.IndexOf(s[i]);
+				if (nCloseId != -1)
+					nest[nCloseId]++;
+
+				else
+				{
+					var nOpenId = openingBrackets.IndexOf(s[i]);
+					if (nOpenId != -1)
+						nest[nOpenId]--;
+				}
+
+				i--;
 			}
+			while (nest.Any(n => n > 0));
 
 			return i + 1;
+		}
+
+		/// <summary>
+		/// returns index of corresponding closing bracket (with nesting in mind)
+		/// </summary>
+		/// <param name="s"></param>
+		/// <param name="openingBracketIndex"></param>
+		/// <param name="openingBrackets"></param>
+		/// <param name="closingBrackets"></param>
+		/// <returns></returns>
+		public static int IndexOfClosingBracket(this string s,
+			int openingBracketIndex = 0, string openingBrackets = "{([", string closingBrackets = "})]")
+		{
+			var i = openingBracketIndex;
+			var nest = new int[openingBrackets.Length];
+			do
+			{
+				var nOpenId = openingBrackets.IndexOf(s[i]);
+				if (nOpenId != -1)
+					nest[nOpenId]++;
+				else
+				{
+					var nCloseId = closingBrackets.IndexOf(s[i]);
+					if (nCloseId != -1)
+						nest[nCloseId]--;
+				}
+
+				i++;
+			}
+			while (nest.Any(n => n > 0));
+
+			return i - 1;
 		}
 
 		/// <summary>
