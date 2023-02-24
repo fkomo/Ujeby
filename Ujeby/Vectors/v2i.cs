@@ -44,6 +44,14 @@
 			Up,
 		};
 
+		public readonly static v2i[] Corners = new[]
+		{
+			Right + Up,
+			Left + Up,
+			Right + Down,
+			Left + Down,
+		};
+
 		public v2i(long x, long y) : this()
 		{
 			X = x;
