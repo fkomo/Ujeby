@@ -1,6 +1,4 @@
-﻿using OpenTK.Graphics.OpenGL;
-
-namespace Ujeby.Vectors
+﻿namespace Ujeby.Vectors
 {
 #pragma warning disable IDE1006 // Naming Styles
 	public struct v3i : IComparable
@@ -92,16 +90,19 @@ namespace Ujeby.Vectors
 		public static v3i operator /(v3i a, v3i b) => new(a.X / b.X, a.Y / b.Y, a.Z / b.Z);
 		public static v3i operator +(v3i a, v2i b) => new(a.X + b.X, a.Y + b.Y, a.Z);
 		public static v3i operator +(v3i a, long b) => new(a.X + b, a.Y + b, a.Z + b);
+		public static v3i operator -(v3i a, long b) => a + (-b);
 
 		public static bool operator ==(v3i a, v3i b) => a.X == b.X && a.Y == b.Y && a.Z == b.Z;
 		public static bool operator !=(v3i a, v3i b) => !(a == b);
 
 		public long Volume() => X * Y * Z;
+		public long Surface() => 2 * (X * Y + X * Z + Y * Z);
 		public long Length() => (long)Math.Sqrt(Length2());
 		public long Length2() => Math.Abs(X * X) + Math.Abs(Y * Y) + Math.Abs(Z * Z);
 		public v3i Abs() => new(Math.Abs(X), Math.Abs(Y), Math.Abs(Z));
 		public v3i Inv() => new(-X, -Y, -Z);
 		public v2i ToV2i() => new(X, Y);
+		public long[] ToArray() => new[] { X, Y, Z };
 
 		/// <summary>Manhattan length</summary>
 		public long ManhLength() => X + Y + Z;

@@ -3,6 +3,8 @@
 namespace Ujeby.Alg
 {
 	/// <summary>
+	/// finds shortest path between 2 vertices in weighted graph
+	/// 
 	/// https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
 	/// </summary>
 	public class Dijkstra

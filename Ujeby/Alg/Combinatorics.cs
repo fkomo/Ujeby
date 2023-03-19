@@ -5,42 +5,78 @@
 	/// </summary>
 	public class Combinatorics
 	{
-		public static IEnumerable<IEnumerable<T>> PermutationsWithRep<T>(IEnumerable<T> list, int length)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="list"></param>
+		/// <param name="length"></param>
+		/// <returns></returns>
+		public static IEnumerable<T>[] PermutationsWithRep<T>(IEnumerable<T> list, int length)
 		{
 			if (length == 1)
-				return list.Select(t => new T[] { t });
+				return list.Select(t => new T[] { t })
+					.ToArray();
 			
 			return PermutationsWithRep(list, length - 1)
-				.SelectMany(t => list, (t1, t2) => t1.Concat(new T[] { t2 }));
+				.SelectMany(t => list, (t1, t2) => t1.Concat(new T[] { t2 }))
+				.ToArray();
 		}
 
-		public static IEnumerable<IEnumerable<T>> Permutations<T>(IEnumerable<T> list, int length)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="list"></param>
+		/// <param name="length"></param>
+		/// <returns></returns>
+		public static IEnumerable<T>[] Permutations<T>(IEnumerable<T> list, int length)
 		{
 			if (length == 1)
-				return list.Select(t => new T[] { t });
-			
+				return list.Select(t => new T[] { t })
+					.ToArray();
+
 			return Permutations(list, length - 1)
-				.SelectMany(t => list.Where(o => !t.Contains(o)), (t1, t2) => t1.Concat(new T[] { t2 }));
+				.SelectMany(t => list.Where(o => !t.Contains(o)), (t1, t2) => t1.Concat(new T[] { t2 }))
+				.ToArray();
 		}
 
-		public static IEnumerable<IEnumerable<T>> KCombinations<T>(IEnumerable<T> list, int length)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="list"></param>
+		/// <param name="length"></param>
+		/// <returns></returns>
+		public static IEnumerable<T>[] Combinations<T>(IEnumerable<T> list, int length)
 			where T : IComparable
 		{
 			if (length == 1)
-				return list.Select(t => new T[] { t });
+				return list.Select(t => new T[] { t })
+					.ToArray();
 
-			return KCombinations(list, length - 1)
-				.SelectMany(t => list.Where(o => o.CompareTo(t.Last()) > 0), (t1, t2) => t1.Concat(new T[] { t2 }));
+			return Combinations(list, length - 1)
+				.SelectMany(t => list.Where(o => o.CompareTo(t.Last()) > 0), (t1, t2) => t1.Concat(new T[] { t2 }))
+				.ToArray();
 		}
 
-		public static IEnumerable<IEnumerable<T>> KCombinationsWithRep<T>(IEnumerable<T> list, int length)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="list"></param>
+		/// <param name="length"></param>
+		/// <returns></returns>
+		public static IEnumerable<T>[] CombinationsWithRep<T>(IEnumerable<T> list, int length)
 			where T : IComparable
 		{
 			if (length == 1)
-				return list.Select(t => new T[] { t });
-			
-			return KCombinationsWithRep(list, length - 1)
-				.SelectMany(t => list.Where(o => o.CompareTo(t.Last()) >= 0), (t1, t2) => t1.Concat(new T[] { t2 }));
+				return list.Select(t => new T[] { t })
+					.ToArray();
+
+			return CombinationsWithRep(list, length - 1)
+				.SelectMany(t => list.Where(o => o.CompareTo(t.Last()) >= 0), (t1, t2) => t1.Concat(new T[] { t2 }))
+				.ToArray();
 		}
 	}
 }

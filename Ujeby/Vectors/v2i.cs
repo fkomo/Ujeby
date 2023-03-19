@@ -44,6 +44,14 @@
 			Up,
 		};
 
+		public readonly static v2i[] Corners = new[]
+		{
+			Right + Up,
+			Left + Up,
+			Right + Down,
+			Left + Down,
+		};
+
 		public v2i(long x, long y) : this()
 		{
 			X = x;
@@ -91,6 +99,7 @@
 		public long Area() => X * Y;
 		public v2i Abs() => new(Math.Abs(X), Math.Abs(Y));
 		public v2i Inv() => new(-X, -Y);
+		public long[] ToArray() => new[] { X, Y };
 
 		/// <summary>Manhattan length</summary>
 		public long ManhLength() => X + Y;

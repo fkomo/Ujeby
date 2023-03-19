@@ -3,6 +3,8 @@
 namespace Ujeby.Alg
 {
 	/// <summary>
+	/// finds shortest path between start and every other vertex
+	/// 
 	/// https://en.wikipedia.org/wiki/Breadth-first_search
 	/// </summary>
 	public class BreadthFirstSearch

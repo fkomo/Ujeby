@@ -62,6 +62,14 @@
 		{
 		}
 
+		public v4i(long[] xyzw) : this(xyzw[0], xyzw[1], xyzw[2], xyzw[3])
+		{
+		}
+
+		public v4i(v2i xy, v2i zw) : this(xy[0], xy[1], zw[0], zw[1])
+		{
+		}
+
 		public override string ToString() => $"[{X};{Y};{Z};{W}]";
 		public override bool Equals(object obj) => obj is v4i v && this == v;
 		public override int GetHashCode() => X.GetHashCode() ^ Y.GetHashCode() ^ Z.GetHashCode() ^ W.GetHashCode();
@@ -74,18 +82,20 @@
 		public static v4i operator /(v4i a, v4i b) => new(a.X / b.X, a.Y / b.Y, a.Z / b.Z, a.W / b.W);
 		public static v4i operator +(v4i a, v2i b) => new(a.X + b.X, a.Y + b.Y, a.Z, a.W);
 		public static v4i operator +(v4i a, v3i b) => new(a.X + b.X, a.Y + b.Y, a.Z + b.Z, a.W);
-
-		public static implicit operator v2f(v4i v) => new(v.X, v.Y);
-
-		public static implicit operator v2i(v4i v) => new(v.X, v.Y);
-		public static implicit operator v3i(v4i v) => new(v.X, v.Y, v.Z);
+		public static v4i operator +(v4i a, long b) => new(a.X + b, a.Y + b, a.Z + b, a.W + b);
+		public static v4i operator -(v4i a, long b) => a + (-b);
 
 		public static bool operator ==(v4i a, v4i b) => a.X == b.X && a.Y == b.Y && a.Z == b.Z && a.W == b.W;
 		public static bool operator !=(v4i a, v4i b) => !(a == b);
 
+		public static implicit operator v2f(v4i v) => new(v.X, v.Y);
+		public static implicit operator v2i(v4i v) => new(v.X, v.Y);
+		public static implicit operator v3i(v4i v) => new(v.X, v.Y, v.Z);
+
 		public v4i Abs() => new(Math.Abs(X), Math.Abs(Y), Math.Abs(Z), Math.Abs(W));
 		public v2i ToV2i() => new(X, Y);
 		public v3i ToV3i() => new(X, Y, Z);
+		public long[] ToArray() => new[] { X, Y, Z };
 
 		public static v4i Min(v4i v1, v4i v2) => new(Math.Min(v1.X, v2.X), Math.Min(v1.Y, v2.Y), Math.Min(v1.Z, v2.Z), Math.Min(v1.W, v2.W));
 		public static v4i Max(v4i v1, v4i v2) => new(Math.Max(v1.X, v2.X), Math.Max(v1.Y, v2.Y), Math.Max(v1.Z, v2.Z), Math.Max(v1.W, v2.W));

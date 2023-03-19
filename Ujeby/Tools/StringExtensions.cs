@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Ujeby.Tools
+namespace Ujeby.Tools.StringExtensions
 {
 	public static class StringExtensions
 	{
@@ -173,6 +173,112 @@ namespace Ujeby.Tools
 			after = after.Replace('ü', 'u');
 
 			return after;
+		}
+
+		/// <summary>
+		/// returns index of corresponding opening bracket (with nesting in mind)
+		/// </summary>
+		/// <param name="s"></param>
+		/// <param name="closingBracketIndex"></param>
+		/// <param name="openingBrackets"></param>
+		/// <param name="closingBrackets"></param>
+		/// <returns></returns>
+		public static int IndexOfOpeningBracket(this string s, int closingBracketIndex, 
+			string openingBrackets = "{([", string closingBrackets = "})]")
+		{
+			var i = closingBracketIndex;
+			var nest = new int[openingBrackets.Length];
+
+			do
+			{
+				var nCloseId = closingBrackets.IndexOf(s[i]);
+				if (nCloseId != -1)
+					nest[nCloseId]++;
+
+				else
+				{
+					var nOpenId = openingBrackets.IndexOf(s[i]);
+					if (nOpenId != -1)
+						nest[nOpenId]--;
+				}
+
+				i--;
+			}
+			while (nest.Any(n => n > 0));
+
+			return i + 1;
+		}
+
+		/// <summary>
+		/// returns index of corresponding closing bracket (with nesting in mind)
+		/// </summary>
+		/// <param name="s"></param>
+		/// <param name="openingBracketIndex"></param>
+		/// <param name="openingBrackets"></param>
+		/// <param name="closingBrackets"></param>
+		/// <returns></returns>
+		public static int IndexOfClosingBracket(this string s,
+			int openingBracketIndex = 0, string openingBrackets = "{([", string closingBrackets = "})]")
+		{
+			var i = openingBracketIndex;
+			var nest = new int[openingBrackets.Length];
+			do
+			{
+				var nOpenId = openingBrackets.IndexOf(s[i]);
+				if (nOpenId != -1)
+					nest[nOpenId]++;
+				else
+				{
+					var nCloseId = closingBrackets.IndexOf(s[i]);
+					if (nCloseId != -1)
+						nest[nCloseId]--;
+				}
+
+				i++;
+			}
+			while (nest.Any(n => n > 0));
+
+			return i - 1;
+		}
+
+		/// <summary>
+		/// returns tag defined by start/end
+		/// </summary>
+		/// <param name="s"></param>
+		/// <param name="startTag"></param>
+		/// <param name="endTag"></param>
+		/// <returns></returns>
+		public static string GetTag(this string s, string startTag, string endTag)
+		{
+			var regexp = $"{startTag}(.*?){endTag}";
+			var match = Regex.Match(s, regexp);
+
+			return match.Success ? match.Value : null;
+		}
+
+		/// <summary>
+		/// returns only letters and digits from string
+		/// </summary>
+		/// <param name="s"></param>
+		/// <returns></returns>
+		public static string LettersOrDigitsOnly(this string s)
+			=> s == null ? s : new(s.Where(c => char.IsLetterOrDigit(c)).ToArray());
+
+		/// <summary>
+		/// remove tags from string (defined by start/end tag)
+		/// </summary>
+		/// <param name="s"></param>
+		/// <param name="tags"></param>
+		/// <returns></returns>
+		public static string StripTags(this string s, params (string Start, string End)[] tags)
+		{
+			if (string.IsNullOrEmpty(s))
+				return null;
+
+			foreach (var tag in tags)
+				s = Regex.Replace(s, $"{tag.Start}.*?{tag.End}", string.Empty);
+
+			return s;
 		}
 	}
 }

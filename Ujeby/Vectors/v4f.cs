@@ -78,6 +78,7 @@
 		public v4f Inv() => new(-X, -Y, -Z, -W);
 		public v4f Min(v4f v) => new(Math.Min(X, v.X), Math.Min(Y, v.Y), Math.Min(Z, v.Z), Math.Min(W, v.W));
 		public v4f Max(v4f v) => new(Math.Max(X, v.X), Math.Max(Y, v.Y), Math.Max(Z, v.Z), Math.Max(W, v.W));
+		public double[] ToArray() => new[] { X, Y, Z, W };
 
 		public static v4f Min(v4f v1, v4f v2) => new(Math.Min(v1.X, v2.X), Math.Min(v1.Y, v2.Y), Math.Min(v1.Z, v2.Z), Math.Min(v1.W, v2.W));
 		public static v4f Max(v4f v1, v4f v2) => new(Math.Max(v1.X, v2.X), Math.Max(v1.Y, v2.Y), Math.Max(v1.Z, v2.Z), Math.Max(v1.W, v2.W));

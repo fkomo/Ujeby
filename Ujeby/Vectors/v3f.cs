@@ -74,6 +74,7 @@
 		public v3f Inv() => new(-X, -Y, -Z);
 		public v3f Min(v3f v) => new(Math.Min(X, v.X), Math.Min(Y, v.Y), Math.Min(Z, v.Z));
 		public v3f Max(v3f v) => new(Math.Max(X, v.X), Math.Max(Y, v.Y), Math.Max(Z, v.Z));
+		public double[] ToArray() => new[] { X, Y, Z };
 
 		public static v3f Min(v3f v1, v3f v2) => new(Math.Min(v1.X, v2.X), Math.Min(v1.Y, v2.Y), Math.Min(v1.Z, v2.Z));
 		public static v3f Max(v3f v1, v3f v2) => new(Math.Max(v1.X, v2.X), Math.Max(v1.Y, v2.Y), Math.Max(v1.Z, v2.Z));
