@@ -105,7 +105,7 @@
 		public long[] ToArray() => new[] { X, Y, Z };
 
 		/// <summary>Manhattan length</summary>
-		public long ManhLength() => X + Y + Z;
+		public long ManhLength() => Math.Abs(X) + Math.Abs(Y) + Math.Abs(Z);
 
 		/// <summary>Manhattan distance</summary>
 		public static long ManhDistance(v3i a, v3i b) => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y) + Math.Abs(a.Z - b.Z);
