@@ -265,6 +265,14 @@ namespace Ujeby.Tools.StringExtensions
 			=> s == null ? s : new(s.Where(c => char.IsLetterOrDigit(c)).ToArray());
 
 		/// <summary>
+		/// returns only letters from string
+		/// </summary>
+		/// <param name="s"></param>
+		/// <returns></returns>
+		public static string LettersOnly(this string s)
+			=> s == null ? s : new(s.Where(c => char.IsLetter(c)).ToArray());
+
+		/// <summary>
 		/// remove tags from string (defined by start/end tag)
 		/// </summary>
 		/// <param name="s"></param>
