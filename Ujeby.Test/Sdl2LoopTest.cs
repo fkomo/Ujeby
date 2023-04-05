@@ -15,34 +15,34 @@ namespace Ujeby.Test
 
 		protected override void Init()
 		{
-			ShowCursor(false); 
+			Sdl2Wrapper.ShowCursor(false); 
 		}
 
 		protected override void Render()
 		{
-			DrawGrid();
+			Grid.Draw();
 
-			DrawGridText(new(0, 0), HorizontalTextAlign.Center, VerticalTextAlign.Center,
+			Grid.DrawText(new(0, 0), HorizontalTextAlign.Center, VerticalTextAlign.Center,
 				new Text($"[-/-]  [+/-]") { Color = new(.5) },
 				Text.EmptyLine,
 				Text.EmptyLine,
 				new Text($"[-/+]  [+/+]") { Color = new(.5) });
 
-			DrawCircle(0, 0, 500, border: new(1, 1, 0, .8)/*, fill: new(.5, .5, 0, .8)*/);
+			Sdl2Wrapper.DrawCircle(0, 0, 500, border: new(1, 1, 0, .8)/*, fill: new(.5, .5, 0, .8)*/);
 
-			DrawGridCircle(-15, 10, 10, border: new(.5, 0, .5, 1), fill: new(.5, 0, .5, 1));
-			DrawGridCircle(-10, -20, 5, border: new(.5, 0, .5, 1)/*, fill: new(.5, 0, .5, 1)*/);
-			DrawGridText(new(-10, -20), HorizontalTextAlign.Center, VerticalTextAlign.Center, new Text($"circle"));
+			Grid.DrawCircle(-15, 10, 10, border: new(.5, 0, .5, 1), fill: new(.5, 0, .5, 1));
+			Grid.DrawCircle(-10, -20, 5, border: new(.5, 0, .5, 1)/*, fill: new(.5, 0, .5, 1)*/);
+			Grid.DrawText(new(-10, -20), HorizontalTextAlign.Center, VerticalTextAlign.Center, new Text($"circle"));
 
-			DrawGridCell(10, -20, border: new(1, 0, 0, .8), fill: new(.5, 0, 0, .8));
+			Grid.DrawCell(10, -20, border: new(1, 0, 0, .8), fill: new(.5, 0, 0, .8));
 
-			DrawGridRect(5, 10, 30, 15, border: new(0, 1, 0, .8), fill: new(0, .5, 0, .8));
+			Grid.DrawRect(5, 10, 30, 15, border: new(0, 1, 0, .8), fill: new(0, .5, 0, .8));
 
-			DrawRect(300, 400, 200, 100, border: new(0, 0, 1, .8), fill: new(0, 0, .5, .8));
+			Sdl2Wrapper.DrawRect(300, 400, 200, 100, border: new(0, 0, 1, .8), fill: new(0, 0, .5, .8));
 
-			DrawGridLine(-10, -20, -15, 10, new(1, 0, 1, 1));
+			Grid.DrawLine(-10, -20, -15, 10, new(1, 0, 1, 1));
 
-			DrawText(new(32, 32), 
+			Sdl2Wrapper.DrawText(new(32, 32), 
 				new Text($"{nameof(Fps)}: {(int)Fps}") { Color = new(1, 1, 0, 1) },
 				new EmptyLine(),
 				new Text($"{nameof(_frameTime)}: {_frameTime}ms"),
@@ -56,13 +56,13 @@ namespace Ujeby.Test
 				new Text($"{nameof(MousePosition)}: {MousePosition}")
 				);
 
-			DrawGridMouseCursor(
+			Grid.DrawMouseCursor(
 				style: GridCursorStyles.FullRowColumn);
 		}
 
 		protected override void Destroy()
 		{
-			ShowCursor();
+			Sdl2Wrapper.ShowCursor();
 		}
 
 		protected override void LeftMouseDown()

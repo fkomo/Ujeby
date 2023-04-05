@@ -16,9 +16,11 @@ namespace Ujeby.Test
 				// benchmarks
 				//BenchmarkRunner.Run<IntVsString>();
 
-				v2i windowSize = new(1920, 1080);
+				var windowSize = new v2i(1920, 1080);
 
-				Sdl2Wrapper.Init("AoC.Vis", windowSize);
+				Sdl2Wrapper.CreateWindow("AoC.Vis", windowSize);
+				Sdl2Wrapper.CreateFont();
+
 				new Sdl2LoopTest(windowSize).Run(HandleInput);
 
 				//new OpenTKLoopTest(windowSize, "AoC.Vis").Run();
