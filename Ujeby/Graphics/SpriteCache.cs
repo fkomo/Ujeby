@@ -129,7 +129,8 @@ namespace Ujeby.Graphics
 			Library.Clear();
 		}
 
-		public static Sprite LoadSpriteFromFile(string filename, string id = null)
+		public static Sprite LoadSpriteFromFile(string filename, 
+			string id = null)
 		{
 			var sprite = Library.Values.SingleOrDefault(s => s.Filename == filename);
 			if (sprite == null)

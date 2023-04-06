@@ -394,5 +394,37 @@ namespace Ujeby.Graphics.Sdl
 				alignV,
 				lines);
 		}
+
+		/// <summary>
+		/// draw sprite to screen
+		/// </summary>
+		/// <param name="sprite">width == height. if not, sprite is considered as animation strip</param>
+		/// <param name="spritePosition"></param>
+		/// <param name="frame"></param>
+		public static void DrawSprite(Sprite sprite, v2i spritePosition, 
+			int frame = 0)
+		{
+			if (sprite == null)
+				return;
+
+			var spriteSize = (int)sprite.Size.Y;
+
+			var sourceRect = new SDL.SDL_Rect
+			{
+				x = spriteSize * frame,
+				y = 0,
+				w = spriteSize,
+				h = spriteSize,
+			};
+
+			var destinationRect = new SDL.SDL_Rect
+			{
+				x = (int)spritePosition.X,
+				y = (int)spritePosition.Y,
+				w = spriteSize,
+				h = spriteSize,
+			};
+			_ = SDL.SDL_RenderCopy(RendererPtr, sprite.TexturePtr, ref sourceRect, ref destinationRect);
+		}
 	}
 }

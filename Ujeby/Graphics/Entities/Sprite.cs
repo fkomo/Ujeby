@@ -12,11 +12,11 @@ namespace Ujeby.Graphics.Entities
         /// <summary>width x height</summary>
         public v2i Size;
 
-        /// <summary>
-        /// pixel format: 0xARGB
-        /// topLeft -> bottomRight
-        /// </summary>
-        public uint[] Data;
+		/// <summary>
+		/// pixel format: ABGR
+		/// topLeft -> bottomRight
+		/// </summary>
+		public uint[] Data;
 
         /// <summary>sdl2 image pointer</summary>
         public IntPtr ImagePtr = IntPtr.Zero;

@@ -8,7 +8,7 @@
 		<RootNamespace>Ujeby</RootNamespace>
 		<Authors>fkomo</Authors>
 		<Company>Ujeby</Company>
-		<Version>1.15.1</Version>
+		<Version>1.15.2</Version>
 		<!--<PackageVersion>$([System.DateTime]::Now.ToString("yyyy.MM.dd.HHmm"))</PackageVersion>-->
 		<Configurations>Debug;Release;Release-nupkg</Configurations>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
