@@ -1,9 +1,11 @@
-﻿namespace Ujeby.Graphics.Interfaces
+﻿using Ujeby.Game.Sdl;
+
+namespace Ujeby.Graphics.Interfaces
 {
     public interface IRunnable
     {
         string Name { get; }
 
-        void Run(Func<bool> handleInput);
+        void Run(Func<InputButton, InputButtonState, bool> handleInput);
     }
 }

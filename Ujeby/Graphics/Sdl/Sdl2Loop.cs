@@ -1,5 +1,6 @@
 ﻿using SDL2;
 using System.Diagnostics;
+using Ujeby.Game.Sdl;
 using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Interfaces;
 using Ujeby.Vectors;
@@ -47,15 +48,15 @@ namespace Ujeby.Graphics.Sdl
 			};
 		}
 
-		public void Run(Func<bool> handleInput)
+		public void Run(Func<InputButton, InputButtonState, bool> handleInput)
 		{
 			Init();
 
-			while (Sdl2Wrapper.HandleInput(handleInput) && !_terminate)
+			while (Sdl2InputWrapper.HandleInput(handleInput) && !_terminate)
 			{
 				_frameSw.Restart();
 
-				MousePosition = Sdl2Wrapper.GetMouse(out _mouseState);
+				MousePosition = Sdl2InputWrapper.GetMouse(out _mouseState);
 
 				// mouse right
 				var right = (_mouseState & 4) == 4;
@@ -77,10 +78,10 @@ namespace Ujeby.Graphics.Sdl
 					LeftMouseUp();
 				_mouseLeft = left;
 
-				if (Sdl2Wrapper.MouseWheel != 0)
+				if (Sdl2InputWrapper.MouseWheel != 0)
 				{
-					Grid.Zoom(Sdl2Wrapper.MouseWheel);
-					Sdl2Wrapper.MouseWheel = 0;
+					Grid.Zoom(Sdl2InputWrapper.MouseWheel);
+					Sdl2InputWrapper.MouseWheel = 0;
 				}
 
 				Update();

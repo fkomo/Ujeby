@@ -68,93 +68,6 @@ namespace Ujeby.Graphics.Sdl
 			SDL.SDL_Quit();
 		}
 
-		private static readonly byte[] CurrentKeys = new byte[(int)SDL.SDL_Scancode.SDL_NUM_SCANCODES];
-		private static readonly byte[] PreviousKeys = new byte[(int)SDL.SDL_Scancode.SDL_NUM_SCANCODES];
-
-		public static int MouseWheel { get; set; }
-
-		public static bool HandleInput(Func<bool> handleInput)
-		{
-			while (SDL.SDL_PollEvent(out SDL.SDL_Event e) != 0)
-			{
-				MouseWheel = 0;
-
-				switch (e.type)
-				{
-					case SDL.SDL_EventType.SDL_QUIT:
-						return false;
-				};
-
-				if (e.type == SDL.SDL_EventType.SDL_KEYUP || e.type == SDL.SDL_EventType.SDL_KEYDOWN)
-				{
-					CurrentKeys.CopyTo(PreviousKeys, 0);
-					var keysBuffer = SDL.SDL_GetKeyboardState(out int keysBufferLength);
-					System.Runtime.InteropServices.Marshal.Copy(keysBuffer, CurrentKeys, 0, keysBufferLength);
-
-					if (KeyPressed(SDL.SDL_Scancode.SDL_SCANCODE_ESCAPE))
-						return false;
-
-					// TODO handle user input
-
-					//if (KeyPressed(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_UP))
-					//	player.HandleButton(InputButton.Up, InputButtonState.Pressed);
-					//if (KeyReleased(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_UP))
-					//	player.HandleButton(InputButton.Up, InputButtonState.Released);
-
-					//if (KeyPressed(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_DOWN))
-					//	player.HandleButton(InputButton.Down, InputButtonState.Pressed);
-					//if (KeyReleased(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_DOWN))
-					//	player.HandleButton(InputButton.Down, InputButtonState.Released);
-
-					//if (KeyPressed(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_LEFT))
-					//	player.HandleButton(InputButton.Left, InputButtonState.Pressed);
-					//if (KeyReleased(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_LEFT))
-					//	player.HandleButton(InputButton.Left, InputButtonState.Released);
-
-					//if (KeyPressed(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_RIGHT))
-					//	player.HandleButton(InputButton.Right, InputButtonState.Pressed);
-					//if (KeyReleased(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_RIGHT))
-					//	player.HandleButton(InputButton.Right, InputButtonState.Released);
-
-					//if (KeyPressed(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_LSHIFT))
-					//	player.HandleButton(InputButton.LT, InputButtonState.Pressed);
-					//if (KeyReleased(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_LSHIFT))
-					//	player.HandleButton(InputButton.LT, InputButtonState.Released);
-
-					//if (KeyPressed(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_RSHIFT))
-					//	player.HandleButton(InputButton.RT, InputButtonState.Pressed);
-					//if (KeyReleased(SDL2.SDL.SDL_Scancode.SDL_SCANCODE_RSHIFT))
-					//	player.HandleButton(InputButton.RT, InputButtonState.Released);
-
-					return handleInput();
-				}
-
-				else if (e.type == SDL.SDL_EventType.SDL_MOUSEWHEEL)
-				{
-					if (e.wheel.y > 0) // scroll up
-					{
-					}
-					else if (e.wheel.y < 0) // scroll down
-					{
-					}
-
-					MouseWheel = e.wheel.y;
-				}
-			}
-
-			return true;
-		}
-
-		public static bool KeyPressed(SDL.SDL_Scancode scanCode)
-		{
-			return CurrentKeys[(int)scanCode] == 1 && PreviousKeys[(int)scanCode] == 0;
-		}
-
-		public static bool KeyReleased(SDL.SDL_Scancode scanCode)
-		{
-			return CurrentKeys[(int)scanCode] == 0 && PreviousKeys[(int)scanCode] == 1;
-		}
-
 		public static void SetWindowTitle(string title)
 		{
 			SDL.SDL_SetWindowTitle(WindowPtr, title);
@@ -164,12 +77,6 @@ namespace Ujeby.Graphics.Sdl
 			bool show = true)
 		{
 			_ = SDL.SDL_ShowCursor(show ? 1 : 0);
-		}
-
-		public static v2i GetMouse(out uint mouseState)
-		{
-			mouseState = SDL.SDL_GetMouseState(out int mouseX, out int mouseY);
-			return new(mouseX, mouseY);
 		}
 
 		public static void Render()

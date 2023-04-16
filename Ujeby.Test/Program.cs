@@ -1,8 +1,6 @@
-﻿using BenchmarkDotNet.Running;
-using System;
+﻿using System;
+using Ujeby.Game.Sdl;
 using Ujeby.Graphics.Sdl;
-using Ujeby.Test.Benchmarks;
-using Ujeby.Tools;
 using Ujeby.Vectors;
 
 namespace Ujeby.Test
@@ -21,7 +19,7 @@ namespace Ujeby.Test
 				Sdl2Wrapper.CreateWindow("AoC.Vis", windowSize);
 				Sdl2Wrapper.CreateFont();
 
-				new Sdl2LoopTest(windowSize).Run(HandleInput);
+				new Sdl2LoopTest(windowSize).Run(HandleUserInput);
 
 				//new OpenTKLoopTest(windowSize, "AoC.Vis").Run();
 			}
@@ -35,8 +33,11 @@ namespace Ujeby.Test
 			}
 		}
 
-		private static bool HandleInput()
+		private static bool HandleUserInput(InputButton btn, InputButtonState btnState)
 		{
+			if (btn == InputButton.Menu)
+				return false;
+
 			return true;
 		}
 	}
