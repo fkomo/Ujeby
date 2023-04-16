@@ -24,10 +24,10 @@ namespace Ujeby.Game.Sdl
 			{ InputButton.Y, SDL.SDL_Scancode.SDL_SCANCODE_K },
 			{ InputButton.A, SDL.SDL_Scancode.SDL_SCANCODE_N },
 			{ InputButton.B, SDL.SDL_Scancode.SDL_SCANCODE_M },
-			{ InputButton.Menu, SDL.SDL_Scancode.SDL_SCANCODE_ESCAPE },
+			{ InputButton.Start, SDL.SDL_Scancode.SDL_SCANCODE_ESCAPE },
 		};
 
-		public static bool HandleInput(Func<InputButton, InputButtonState, bool> handleInput, 
+		public static bool HandleInput(Action<InputButton, InputButtonState> handleInput, 
 			Dictionary<InputButton, SDL.SDL_Scancode> keyMappings = null)
 		{
 			keyMappings ??= _defaultKeyMappings;
@@ -51,15 +51,11 @@ namespace Ujeby.Game.Sdl
 					// handle user input
 					foreach (var btn in keyMappings)
 					{
-						var result = true;
 						if (KeyPressed(btn.Value))
-							result = handleInput(btn.Key, InputButtonState.Pressed);
+							handleInput(btn.Key, InputButtonState.Pressed);
 
 						if (KeyReleased(btn.Value))
-							result = handleInput(btn.Key, InputButtonState.Released);
-
-						if (!result)
-							return false;
+							handleInput(btn.Key, InputButtonState.Released);
 					}
 				}
 

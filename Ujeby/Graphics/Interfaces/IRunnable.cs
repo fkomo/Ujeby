@@ -6,6 +6,6 @@ namespace Ujeby.Graphics.Interfaces
     {
         string Name { get; }
 
-        void Run(Func<InputButton, InputButtonState, bool> handleInput);
+        void Run(Action<InputButton, InputButtonState> handleInput);
     }
 }

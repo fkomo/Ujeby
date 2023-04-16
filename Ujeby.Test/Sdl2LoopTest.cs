@@ -74,5 +74,10 @@ namespace Ujeby.Test
 		{
 
 		}
+
+		internal void Run()
+		{
+			Run(HandleUserInput);
+		}
 	}
 }

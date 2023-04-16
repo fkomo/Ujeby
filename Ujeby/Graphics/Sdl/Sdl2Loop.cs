@@ -1,13 +1,11 @@
-﻿using SDL2;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Ujeby.Game.Sdl;
-using Ujeby.Graphics.Entities;
 using Ujeby.Graphics.Interfaces;
 using Ujeby.Vectors;
 
 namespace Ujeby.Graphics.Sdl
 {
-    public abstract class Sdl2Loop : IRunnable
+	public abstract class Sdl2Loop : IRunnable
 	{
 		public abstract string Name { get; }
 
@@ -48,7 +46,7 @@ namespace Ujeby.Graphics.Sdl
 			};
 		}
 
-		public void Run(Func<InputButton, InputButtonState, bool> handleInput)
+		public void Run(Action<InputButton, InputButtonState> handleInput)
 		{
 			Init();
 
@@ -129,6 +127,12 @@ namespace Ujeby.Graphics.Sdl
 
 		protected virtual void Destroy()
 		{
+		}
+
+		protected virtual void HandleUserInput(InputButton btn, InputButtonState btnState)
+		{
+			if (btn == InputButton.Start && btnState == InputButtonState.Pressed)
+				_terminate = true;
 		}
 	}
 }

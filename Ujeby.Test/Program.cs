@@ -19,7 +19,7 @@ namespace Ujeby.Test
 				Sdl2Wrapper.CreateWindow("AoC.Vis", windowSize);
 				Sdl2Wrapper.CreateFont();
 
-				new Sdl2LoopTest(windowSize).Run(HandleUserInput);
+				new Sdl2LoopTest(windowSize).Run();
 
 				//new OpenTKLoopTest(windowSize, "AoC.Vis").Run();
 			}
@@ -31,14 +31,6 @@ namespace Ujeby.Test
 			{
 				Sdl2Wrapper.Destroy();
 			}
-		}
-
-		private static bool HandleUserInput(InputButton btn, InputButtonState btnState)
-		{
-			if (btn == InputButton.Menu)
-				return false;
-
-			return true;
 		}
 	}
 }

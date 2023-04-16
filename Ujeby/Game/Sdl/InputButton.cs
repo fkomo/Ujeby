@@ -20,6 +20,9 @@
 		Y,
 		A,
 		B,
-		Menu,
+		Start,
+		Back,
+
+		// TODO left stick + right stick
 	}
 }
