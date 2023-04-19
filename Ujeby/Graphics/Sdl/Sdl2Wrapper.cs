@@ -87,8 +87,20 @@ namespace Ujeby.Graphics.Sdl
 		public static void Clear(v4f color)
 		{
 			var bColor = color * 255;
-			_ = SDL.SDL_SetRenderDrawColor(Sdl2Wrapper.RendererPtr, (byte)bColor.X, (byte)bColor.Y, (byte)bColor.Z, (byte)bColor.W);
-			_ = SDL.SDL_RenderClear(Sdl2Wrapper.RendererPtr);
+			_ = SDL.SDL_SetRenderDrawColor(RendererPtr, (byte)bColor.X, (byte)bColor.Y, (byte)bColor.Z, (byte)bColor.W);
+			_ = SDL.SDL_RenderClear(RendererPtr);
+		}
+
+		public static void DrawPixel(int x, int y, v4f color)
+		{
+			var bColor = color * 255;
+			_ = SDL.SDL_SetRenderDrawColor(RendererPtr, (byte)bColor.X, (byte)bColor.Y, (byte)bColor.Z, (byte)bColor.W);
+			_ = SDL.SDL_RenderDrawPoint(RendererPtr, x, y);
+		}
+
+		public static void DrawPixel(v2i p, v4f color)
+		{
+			DrawPixel((int)p.X, (int)p.Y, color);
 		}
 
 		public static void DrawRect(int x, int y, int w, int h,
@@ -105,23 +117,23 @@ namespace Ujeby.Graphics.Sdl
 			if (fill.HasValue)
 			{
 				var fColor = fill.Value * 255;
-				_ = SDL.SDL_SetRenderDrawColor(Sdl2Wrapper.RendererPtr, (byte)fColor.X, (byte)fColor.Y, (byte)fColor.Z, (byte)fColor.W);
-				_ = SDL.SDL_RenderFillRect(Sdl2Wrapper.RendererPtr, ref rect);
+				_ = SDL.SDL_SetRenderDrawColor(RendererPtr, (byte)fColor.X, (byte)fColor.Y, (byte)fColor.Z, (byte)fColor.W);
+				_ = SDL.SDL_RenderFillRect(RendererPtr, ref rect);
 			}
 
 			if (border.HasValue)
 			{
 				var bColor = border.Value * 255;
-				_ = SDL.SDL_SetRenderDrawColor(Sdl2Wrapper.RendererPtr, (byte)bColor.X, (byte)bColor.Y, (byte)bColor.Z, (byte)bColor.W);
-				_ = SDL.SDL_RenderDrawRect(Sdl2Wrapper.RendererPtr, ref rect);
+				_ = SDL.SDL_SetRenderDrawColor(RendererPtr, (byte)bColor.X, (byte)bColor.Y, (byte)bColor.Z, (byte)bColor.W);
+				_ = SDL.SDL_RenderDrawRect(RendererPtr, ref rect);
 			}
 		}
 
 		public static void DrawLine(int x1, int y1, int x2, int y2, v4f color)
 		{
 			var bColor = color * 255;
-			_ = SDL.SDL_SetRenderDrawColor(Sdl2Wrapper.RendererPtr, (byte)bColor.X, (byte)bColor.Y, (byte)bColor.Z, (byte)bColor.W);
-			_ = SDL.SDL_RenderDrawLine(Sdl2Wrapper.RendererPtr, x1, y1, x2, y2);
+			_ = SDL.SDL_SetRenderDrawColor(RendererPtr, (byte)bColor.X, (byte)bColor.Y, (byte)bColor.Z, (byte)bColor.W);
+			_ = SDL.SDL_RenderDrawLine(RendererPtr, x1, y1, x2, y2);
 		}
 
 		public static void DrawCircle(int cx, int cy, int radius,
@@ -132,7 +144,7 @@ namespace Ujeby.Graphics.Sdl
 			if (fill.HasValue)
 			{
 				var fColor = fill.Value * 255;
-				_ = SDL.SDL_SetRenderDrawColor(Sdl2Wrapper.RendererPtr, (byte)fColor.X, (byte)fColor.Y, (byte)fColor.Z, (byte)fColor.W);
+				_ = SDL.SDL_SetRenderDrawColor(RendererPtr, (byte)fColor.X, (byte)fColor.Y, (byte)fColor.Z, (byte)fColor.W);
 
 				for (int w = 0; w < radius * 2; w++)
 				{
@@ -142,7 +154,7 @@ namespace Ujeby.Graphics.Sdl
 						int dy = radius - h; // vertical offset
 						if ((dx * dx + dy * dy) <= (radius * radius))
 						{
-							_ = SDL.SDL_RenderDrawPoint(Sdl2Wrapper.RendererPtr, cx + dx, cy + dy);
+							_ = SDL.SDL_RenderDrawPoint(RendererPtr, cx + dx, cy + dy);
 						}
 					}
 				}
@@ -151,7 +163,7 @@ namespace Ujeby.Graphics.Sdl
 			if (border.HasValue)
 			{
 				var bColor = border.Value * 255;
-				_ = SDL.SDL_SetRenderDrawColor(Sdl2Wrapper.RendererPtr, (byte)bColor.X, (byte)bColor.Y, (byte)bColor.Z, (byte)bColor.W);
+				_ = SDL.SDL_SetRenderDrawColor(RendererPtr, (byte)bColor.X, (byte)bColor.Y, (byte)bColor.Z, (byte)bColor.W);
 			}
 
 			var diameter = radius + radius;
@@ -163,14 +175,14 @@ namespace Ujeby.Graphics.Sdl
 			while (x >= y)
 			{
 				//  Each of the following renders an octant of the circle
-				_ = SDL.SDL_RenderDrawPoint(Sdl2Wrapper.RendererPtr, cx + x, cy - y);
-				_ = SDL.SDL_RenderDrawPoint(Sdl2Wrapper.RendererPtr, cx + x, cy + y);
-				_ = SDL.SDL_RenderDrawPoint(Sdl2Wrapper.RendererPtr, cx - x, cy - y);
-				_ = SDL.SDL_RenderDrawPoint(Sdl2Wrapper.RendererPtr, cx - x, cy + y);
-				_ = SDL.SDL_RenderDrawPoint(Sdl2Wrapper.RendererPtr, cx + y, cy - x);
-				_ = SDL.SDL_RenderDrawPoint(Sdl2Wrapper.RendererPtr, cx + y, cy + x);
-				_ = SDL.SDL_RenderDrawPoint(Sdl2Wrapper.RendererPtr, cx - y, cy - x);
-				_ = SDL.SDL_RenderDrawPoint(Sdl2Wrapper.RendererPtr, cx - y, cy + x);
+				_ = SDL.SDL_RenderDrawPoint(RendererPtr, cx + x, cy - y);
+				_ = SDL.SDL_RenderDrawPoint(RendererPtr, cx + x, cy + y);
+				_ = SDL.SDL_RenderDrawPoint(RendererPtr, cx - x, cy - y);
+				_ = SDL.SDL_RenderDrawPoint(RendererPtr, cx - x, cy + y);
+				_ = SDL.SDL_RenderDrawPoint(RendererPtr, cx + y, cy - x);
+				_ = SDL.SDL_RenderDrawPoint(RendererPtr, cx + y, cy + x);
+				_ = SDL.SDL_RenderDrawPoint(RendererPtr, cx - y, cy - x);
+				_ = SDL.SDL_RenderDrawPoint(RendererPtr, cx - y, cy + x);
 
 				if (error <= 0)
 				{
@@ -239,7 +251,7 @@ namespace Ujeby.Graphics.Sdl
 						destinationRect.w = (int)(charAabb.Size.X * scale.X);
 						destinationRect.h = (int)(charAabb.Size.Y * scale.Y);
 
-						_ = SDL.SDL_RenderCopy(Sdl2Wrapper.RendererPtr, fontSprite.TexturePtr, ref sourceRect, ref destinationRect);
+						_ = SDL.SDL_RenderCopy(RendererPtr, fontSprite.TexturePtr, ref sourceRect, ref destinationRect);
 						textPosition.X += (charAabb.Size.X + font.Spacing.X + spacing.X) * scale.X;
 					}
 
