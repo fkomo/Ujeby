@@ -268,6 +268,7 @@ namespace Ujeby.Graphics
 				scale,
 				alignH,
 				alignV,
+				null,
 				lines);
 		}
 
@@ -310,7 +311,7 @@ namespace Ujeby.Graphics
 			if (printCoords)
 			{
 				var p = (MousePosition / MinorSize) * MinorSize + (Sdl2Wrapper.WindowSize / 2) + Offset;
-				Sdl2Wrapper.DrawText(p + MinorSize * 2, new Text($"[{(int)m.X};{(int)m.Y}]"));
+				Sdl2Wrapper.DrawText(p + MinorSize * 2, null, new Text($"[{(int)m.X};{(int)m.Y}]"));
 			}
 		}
 	}

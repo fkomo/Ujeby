@@ -15,9 +15,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="Content\Fonts\font-5x7-data.png" />
+	  <None Remove="Content\Fonts\font-5x7-aabb.png" />
 	  <None Remove="Content\Fonts\font-5x7.ase" />
 	  <None Remove="Content\Fonts\font-5x7.png" />
+	  <None Remove="Content\Fonts\font-7x11-aabb.png" />
+	  <None Remove="Content\Fonts\font-7x11-outline.png" />
+	  <None Remove="Content\Fonts\font-7x11.ase" />
+	  <None Remove="Content\Fonts\font-7x11.png" />
 	  <None Remove="ffmpeg.config.json" />
 	</ItemGroup>
 
@@ -28,7 +32,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="Content\Fonts\font-5x7-data.png">
+	  <EmbeddedResource Include="Content\Fonts\font-5x7-aabb.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </EmbeddedResource>
 	  <EmbeddedResource Include="Content\Fonts\font-5x7.ase">
@@ -37,6 +41,10 @@
 	  <EmbeddedResource Include="Content\Fonts\font-5x7.png">
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </EmbeddedResource>
+	  <EmbeddedResource Include="Content\Fonts\font-7x11-aabb.png" />
+	  <EmbeddedResource Include="Content\Fonts\font-7x11-outline.png" />
+	  <EmbeddedResource Include="Content\Fonts\font-7x11.ase" />
+	  <EmbeddedResource Include="Content\Fonts\font-7x11.png" />
 	</ItemGroup>
 
 	<PropertyGroup Condition="'$(Configuration)' == 'Release-nupkg'">

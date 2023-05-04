@@ -54,9 +54,7 @@ namespace Ujeby.Graphics.Sdl
 			//	fontName: Path.Combine(SpriteCache.ContentDirectory, "Fonts", $"{fontName}.png"),
 			//	fontDataName: Path.Combine(SpriteCache.ContentDirectory, "Fonts", $"{fontName}-data.png");
 
-			CurrentFont = SpriteCache.LoadFont(SpriteCache.LoadSpriteFromResource,
-				fontName: $"Ujeby.Content.Fonts.{fontName}.png",
-				fontDataName: $"Ujeby.Content.Fonts.{fontName}-data.png"); ;
+			CurrentFont = SpriteCache.LoadFont(SpriteCache.LoadSpriteFromResource, fontName);
 
 			SpriteCache.CreateTexture(CurrentFont.SpriteId, out _);
 		}
@@ -201,7 +199,7 @@ namespace Ujeby.Graphics.Sdl
 		}
 
 		public static void DrawText(Font font, v2i position, v2i spacing, v2i scale, HorizontalTextAlign alignH, VerticalTextAlign alignV,
-			params TextLine[] lines)
+			v4f? outlineColor, params TextLine[] lines)
 		{
 			var textSize = font.GetTextSize(spacing, scale, lines);
 			var align = new v2i();
@@ -223,10 +221,15 @@ namespace Ujeby.Graphics.Sdl
 			}
 			position -= align;
 
-			var fontSprite = SpriteCache.Get(Sdl2Wrapper.CurrentFont.SpriteId);
+			var fontSprite = SpriteCache.Get(font.SpriteId);
 
 			var sourceRect = new SDL.SDL_Rect();
 			var destinationRect = new SDL.SDL_Rect();
+
+			var oColor = new v4f();
+			var outlineSprite = SpriteCache.Get(font.OutlineSpriteId);
+			if (outlineColor.HasValue && outlineSprite != null)
+				oColor = outlineColor.Value * 255;
 
 			var textPosition = position;
 			foreach (var line in lines)
@@ -234,11 +237,10 @@ namespace Ujeby.Graphics.Sdl
 				if (line is Text text)
 				{
 					var color = text.Color * 255;
-					_ = SDL.SDL_SetTextureColorMod(fontSprite.TexturePtr, (byte)color.X, (byte)color.Y, (byte)color.Z);
 
 					for (var i = 0; i < text.Value.Length; i++)
 					{
-						var charIndex = (int)text.Value[i] - 32;
+						var charIndex = text.Value[i] - 32;
 						var charAabb = font.CharBoxes[charIndex];
 
 						sourceRect.x = (int)(font.CharSize.X * charIndex + charAabb.Min.X);
@@ -246,12 +248,29 @@ namespace Ujeby.Graphics.Sdl
 						sourceRect.w = (int)charAabb.Size.X;
 						sourceRect.h = (int)charAabb.Size.Y;
 
-						destinationRect.x = (int)(textPosition.X);
-						destinationRect.y = (int)(textPosition.Y);
+						destinationRect.x = (int)textPosition.X;
+						destinationRect.y = (int)textPosition.Y;
 						destinationRect.w = (int)(charAabb.Size.X * scale.X);
 						destinationRect.h = (int)(charAabb.Size.Y * scale.Y);
 
-						_ = SDL.SDL_RenderCopy(RendererPtr, fontSprite.TexturePtr, ref sourceRect, ref destinationRect);
+						if (outlineColor.HasValue && outlineSprite != null)
+						{
+							var outlineSourceRect = sourceRect;
+							outlineSourceRect.w += 2;
+							outlineSourceRect.x -= 1;
+
+							var outlineDestRect = destinationRect;
+							outlineDestRect.x -= (int)scale.X;
+							outlineDestRect.w += 2 * (int)scale.X;
+
+							_ = SDL.SDL_SetTextureColorMod(outlineSprite.TexturePtr,
+								(byte)oColor.X, (byte)oColor.Y, (byte)oColor.Z);
+							_ = SDL.SDL_RenderCopy(Sdl2Wrapper.RendererPtr, outlineSprite.TexturePtr,
+								ref outlineSourceRect, ref outlineDestRect);
+						}
+
+						_ = SDL.SDL_SetTextureColorMod(fontSprite.TexturePtr, (byte)color.X, (byte)color.Y, (byte)color.Z);
+						_ = SDL.SDL_RenderCopy(Sdl2Wrapper.RendererPtr, fontSprite.TexturePtr, ref sourceRect, ref destinationRect);
 						textPosition.X += (charAabb.Size.X + font.Spacing.X + spacing.X) * scale.X;
 					}
 
@@ -265,7 +284,7 @@ namespace Ujeby.Graphics.Sdl
 			}
 		}
 
-		public static void DrawText(v2i topLeft,
+		public static void DrawText(v2i topLeft, v4f? outlineColor,
 			params TextLine[] lines)
 		{
 			DrawText(
@@ -274,10 +293,11 @@ namespace Ujeby.Graphics.Sdl
 				new v2i(2),
 				HorizontalTextAlign.Left,
 				VerticalTextAlign.Top,
+				outlineColor,
 				lines);
 		}
 
-		public static void DrawText(v2i topLeft, v2i spacing, v2i scale,
+		public static void DrawText(v2i topLeft, v2i spacing, v2i scale, v4f? outlineColor,
 			params TextLine[] lines)
 		{
 			DrawText(
@@ -286,10 +306,11 @@ namespace Ujeby.Graphics.Sdl
 				scale,
 				HorizontalTextAlign.Left,
 				VerticalTextAlign.Top,
+				outlineColor,
 				lines);
 		}
 
-		public static void DrawText(v2i topLeft, HorizontalTextAlign alignH, VerticalTextAlign alignV,
+		public static void DrawText(v2i topLeft, HorizontalTextAlign alignH, VerticalTextAlign alignV, v4f? outlineColor,
 			params TextLine[] lines)
 		{
 			DrawText(
@@ -298,10 +319,12 @@ namespace Ujeby.Graphics.Sdl
 				new v2i(2),
 				alignH,
 				alignV,
+				outlineColor,
 				lines);
 		}
 
 		public static void DrawText(v2i position, v2i spacing, v2i scale, HorizontalTextAlign alignH, VerticalTextAlign alignV,
+			v4f? outlineColor, 
 			params TextLine[] lines)
 		{
 			DrawText(
@@ -311,6 +334,7 @@ namespace Ujeby.Graphics.Sdl
 				scale,
 				alignH,
 				alignV,
+				outlineColor,
 				lines);
 		}
 

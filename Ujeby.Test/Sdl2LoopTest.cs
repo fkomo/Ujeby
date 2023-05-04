@@ -42,7 +42,7 @@ namespace Ujeby.Test
 
 			Grid.DrawLine(-10, -20, -15, 10, new(1, 0, 1, 1));
 
-			Sdl2Wrapper.DrawText(new(32, 32), 
+			Sdl2Wrapper.DrawText(new(32, 32), null,
 				new Text($"{nameof(Fps)}: {(int)Fps}") { Color = new(1, 1, 0, 1) },
 				new EmptyLine(),
 				new Text($"{nameof(_frameTime)}: {_frameTime}ms"),

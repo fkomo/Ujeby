@@ -17,7 +17,12 @@ namespace Ujeby.Graphics.Entities
             Value = value;
         }
 
-        public string Value;
+		public Text(string value, v4f color) : this(value)
+		{
+			Color = color;
+		}
+
+		public string Value;
         public v4f Color = Colors.White;
 
 		public static EmptyLine EmptyLine => new();
@@ -26,9 +31,10 @@ namespace Ujeby.Graphics.Entities
     public class Font
     {
         public string SpriteId;
-        public string DataSpriteId;
+        public string AABBSpriteId;
+		public string OutlineSpriteId;
 
-        public v2i CharSize;
+		public v2i CharSize;
         public v2i Spacing;
 
         public AABox2i[] CharBoxes;

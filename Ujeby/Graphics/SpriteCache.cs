@@ -41,29 +41,30 @@ namespace Ujeby.Graphics
 			return sprite;
 		}
 
-		public static Font LoadFont(Func<string, string, Sprite> loadSpriteFunc, string fontName, 
-			string fontDataName = null)
+		public static Font LoadFont(Func<string, string, Sprite> loadSpriteFunc, string fontName)
 		{
-			var sizeString = fontName
+			var fontBaseFile = $"Ujeby.Content.Fonts.{fontName}.png";
+
+			var sizeString = fontBaseFile
 				.Split(".").SkipLast(1).Last()
 				.Split("-").Last()
 				.Split("x");
 
 			var font = new Font
 			{
-				SpriteId = loadSpriteFunc(fontName, null)?.Id,
-				CharSize = new v2i(Convert.ToInt32(sizeString[0]), Convert.ToInt32(sizeString[1])),
+				SpriteId = loadSpriteFunc(fontBaseFile, null)?.Id,
+				CharSize = new v2i(long.Parse(sizeString[0]), long.Parse(sizeString[1])),
 				Spacing = new v2i(1, 1),
 			};
 
 			// create aabb's for each character
-			var dataSprite = loadSpriteFunc(fontDataName, null);
-			if (dataSprite != null)
+			var aabbSprite = loadSpriteFunc($"Ujeby.Content.Fonts.{fontName}-aabb.png", null);
+			if (aabbSprite != null)
 			{
-				font.DataSpriteId = dataSprite.Id;
+				font.AABBSpriteId = aabbSprite.Id;
 
-				font.CharBoxes = new AABox2i[(int)(dataSprite.Size.X / font.CharSize.X)];
-				for (var ci = 0; ci < dataSprite.Size.X; ci += (int)font.CharSize.X)
+				font.CharBoxes = new AABox2i[(int)(aabbSprite.Size.X / font.CharSize.X)];
+				for (var ci = 0; ci < aabbSprite.Size.X; ci += (int)font.CharSize.X)
 				{
 					var min = new v2i(font.CharSize.X, font.CharSize.Y);
 					var max = v2i.Zero;
@@ -72,8 +73,8 @@ namespace Ujeby.Graphics
 					{
 						for (var x = 0; x < font.CharSize.X; x++)
 						{
-							var index = (int)(y * dataSprite.Size.X + x + ci);
-							if (dataSprite.Data[index] != 0)
+							var index = (int)(y * aabbSprite.Size.X + x + ci);
+							if (aabbSprite.Data[index] != 0)
 							{
 								min.X = Math.Min(min.X, x);
 								min.Y = Math.Min(min.Y, y);
@@ -86,6 +87,10 @@ namespace Ujeby.Graphics
 					font.CharBoxes[(int)(ci / font.CharSize.X)] = new AABox2i(min, max);
 				}
 			}
+
+			var outlineSprite = loadSpriteFunc($"Ujeby.Content.Fonts.{fontName}-outline.png", null);
+			if (outlineSprite != null)
+				font.OutlineSpriteId = outlineSprite.Id;
 
 			return font;
 		}
@@ -173,6 +178,15 @@ namespace Ujeby.Graphics
 			var assembly = Assembly.GetExecutingAssembly();
 			using (var resourceStream = assembly.GetManifestResourceStream(name))
 			{
+				if (resourceStream == null)
+				{
+					imagePtr = IntPtr.Zero;
+					data = null;
+					size = new v2i();
+
+					return false;
+				}
+
 				imageData = new byte[resourceStream.Length];
 				resourceStream.Read(imageData, 0, imageData.Length);
 			}
