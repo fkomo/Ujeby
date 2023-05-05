@@ -268,7 +268,6 @@ namespace Ujeby.Graphics
 				scale,
 				alignH,
 				alignV,
-				null,
 				lines);
 		}
 

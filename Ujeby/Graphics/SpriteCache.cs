@@ -107,16 +107,23 @@ namespace Ujeby.Graphics
 
 		public static bool CreateTexture(string spriteId, out Sprite sprite)
 		{
-			sprite = Library[spriteId];
-			if (sprite.ImagePtr != IntPtr.Zero && sprite.TexturePtr == IntPtr.Zero)
+			sprite = null;
+			if (string.IsNullOrEmpty(spriteId))
+				return false;
+
+			if (!Library.TryGetValue(spriteId, out sprite))
+				return false;
+
+			if (sprite.ImagePtr == IntPtr.Zero)
+				return false;
+
+			if (sprite.TexturePtr == IntPtr.Zero)
 			{
 				sprite.TexturePtr = SDL2.SDL.SDL_CreateTextureFromSurface(Sdl2Wrapper.RendererPtr, sprite.ImagePtr);
 				Library[spriteId] = sprite;
-
-				return true;
 			}
 
-			return false;
+			return true;
 		}
 
 		public static void Destroy()

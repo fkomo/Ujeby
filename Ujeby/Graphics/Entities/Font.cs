@@ -2,7 +2,13 @@
 
 namespace Ujeby.Graphics.Entities
 {
-    public abstract class TextLine
+	public sealed class Fonts
+	{
+		public const string Basic5x7 = "basic-5x7";
+		public const string Basic7x11 = "basic-7x11";
+	}
+
+	public abstract class TextLine
     {
     }
 
@@ -22,8 +28,14 @@ namespace Ujeby.Graphics.Entities
 			Color = color;
 		}
 
+		public Text(string value, v4f color, v4f outlineColor) : this(value, color)
+		{
+			OutlineColor = outlineColor;
+		}
+
 		public string Value;
         public v4f Color = Colors.White;
+		public v4f? OutlineColor = null;
 
 		public static EmptyLine EmptyLine => new();
     }

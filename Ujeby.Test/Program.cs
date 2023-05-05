@@ -17,7 +17,7 @@ namespace Ujeby.Test
 				var windowSize = new v2i(1920, 1080);
 
 				Sdl2Wrapper.CreateWindow("AoC.Vis", windowSize);
-				Sdl2Wrapper.CreateFont();
+				Sdl2Wrapper.SetFont();
 
 				new Sdl2LoopTest(windowSize).Run();
 
