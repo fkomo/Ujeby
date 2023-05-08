@@ -12,6 +12,9 @@ namespace Ujeby.Graphics
 		public static string ContentDirectory => Path.Combine(Environment.CurrentDirectory, "Content");
 		public static Dictionary<string, string> LibraryFileMap { get; private set; }
 
+		public static Dictionary<string, Font> Fonts { get; private set; } = new Dictionary<string, Font>();
+
+
 		public static void Initialize(
 			Dictionary<string, string> library = null)
 		{
@@ -43,6 +46,9 @@ namespace Ujeby.Graphics
 
 		public static Font LoadFont(Func<string, string, Sprite> loadSpriteFunc, string fontName)
 		{
+			if (Fonts.ContainsKey(fontName))
+				return Fonts[fontName];
+
 			var fontBaseFile = $"Ujeby.Content.Fonts.{fontName}.png";
 
 			var sizeString = fontBaseFile
@@ -91,6 +97,12 @@ namespace Ujeby.Graphics
 			var outlineSprite = loadSpriteFunc($"Ujeby.Content.Fonts.{fontName}-outline.png", null);
 			if (outlineSprite != null)
 				font.OutlineSpriteId = outlineSprite.Id;
+
+			CreateTexture(font.SpriteId, out _);
+			CreateTexture(font.OutlineSpriteId, out _);
+			CreateTexture(font.AABBSpriteId, out _);
+
+			Fonts.Add(fontName, font);
 
 			return font;
 		}

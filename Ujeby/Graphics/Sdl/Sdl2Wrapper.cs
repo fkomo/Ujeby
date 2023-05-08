@@ -8,7 +8,9 @@ namespace Ujeby.Graphics.Sdl
 	{
 		public static IntPtr WindowPtr { get; private set; }
 		public static IntPtr RendererPtr { get; private set; }
+
 		public static Font CurrentFont { get; private set; }
+
 		public static v2i WindowSize { get; private set; }
 
 		public static void CreateWindow(string title, v2i windowSize)
@@ -46,18 +48,13 @@ namespace Ujeby.Graphics.Sdl
 				(int)screenSize.X, (int)screenSize.Y);
 		}
 
+		public static Font LoadFont(string fontName)
+			=> SpriteCache.LoadFont(SpriteCache.LoadSpriteFromResource, fontName);
+
 		public static void SetFont(
-			string fontName = Fonts.Basic7x11)
+			string fontName = FontNames.Basic7x11)
 		{
-			//CurrentFont = SpriteCache.LoadFont(SpriteCache.LoadSpriteFromFile,
-			//	fontName: Path.Combine(SpriteCache.ContentDirectory, "Fonts", $"{fontName}.png"),
-			//	fontDataName: Path.Combine(SpriteCache.ContentDirectory, "Fonts", $"{fontName}-data.png");
-
-			CurrentFont = SpriteCache.LoadFont(SpriteCache.LoadSpriteFromResource, fontName);
-
-			SpriteCache.CreateTexture(CurrentFont.SpriteId, out _);
-			SpriteCache.CreateTexture(CurrentFont.OutlineSpriteId, out _);
-			SpriteCache.CreateTexture(CurrentFont.AABBSpriteId, out _);
+			CurrentFont = LoadFont(fontName);
 		}
 
 		public static void Destroy()
@@ -240,7 +237,7 @@ namespace Ujeby.Graphics.Sdl
 
 					for (var i = 0; i < text.Value.Length; i++)
 					{
-						var charIndex = text.Value[i] - 32;
+						var charIndex = text.Value[i] - Font.Offset;
 						var charAabb = font.CharBoxes[charIndex];
 
 						sourceRect.x = (int)(font.CharSize.X * charIndex + charAabb.Min.X);

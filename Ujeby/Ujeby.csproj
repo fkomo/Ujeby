@@ -22,6 +22,10 @@
 	  <None Remove="Content\Fonts\basic-7x11-outline.png" />
 	  <None Remove="Content\Fonts\basic-7x11.ase" />
 	  <None Remove="Content\Fonts\basic-7x11.png" />
+	  <None Remove="Content\Fonts\minimal-7x7-aabb.png" />
+	  <None Remove="Content\Fonts\minimal-7x7-outline.png" />
+	  <None Remove="Content\Fonts\minimal-7x7.ase" />
+	  <None Remove="Content\Fonts\minimal-7x7.png" />
 	  <None Remove="ffmpeg.config.json" />
 	</ItemGroup>
 
@@ -45,6 +49,10 @@
 	  <EmbeddedResource Include="Content\Fonts\basic-7x11-outline.png" />
 	  <EmbeddedResource Include="Content\Fonts\basic-7x11.ase" />
 	  <EmbeddedResource Include="Content\Fonts\basic-7x11.png" />
+	  <EmbeddedResource Include="Content\Fonts\minimal-7x7-aabb.png" />
+	  <EmbeddedResource Include="Content\Fonts\minimal-7x7-outline.png" />
+	  <EmbeddedResource Include="Content\Fonts\minimal-7x7.ase" />
+	  <EmbeddedResource Include="Content\Fonts\minimal-7x7.png" />
 	</ItemGroup>
 
 	<PropertyGroup Condition="'$(Configuration)' == 'Release-nupkg'">

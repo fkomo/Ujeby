@@ -2,10 +2,18 @@
 
 namespace Ujeby.Graphics.Entities
 {
-	public sealed class Fonts
+	public enum HorizontalTextAlign
 	{
-		public const string Basic5x7 = "basic-5x7";
-		public const string Basic7x11 = "basic-7x11";
+		Left,
+		Center,
+		Right
+	}
+
+	public enum VerticalTextAlign
+	{
+		Top,
+		Center,
+		Bottom
 	}
 
 	public abstract class TextLine
@@ -51,6 +59,11 @@ namespace Ujeby.Graphics.Entities
 
         public AABox2i[] CharBoxes;
 
+		/// <summary>
+		/// font does not contain first 32 characters
+		/// </summary>
+		public const int Offset = 32;
+
 		public v2i GetTextSize(params TextLine[] lines)
 		{
 			return GetTextSize(new(), new(2), lines);
@@ -82,19 +95,5 @@ namespace Ujeby.Graphics.Entities
 
 			return size * scale;
 		}
-	}
-
-    public enum HorizontalTextAlign
-    {
-        Left,
-        Center,
-        Right
-    }
-
-	public enum VerticalTextAlign
-	{
-		Top,
-		Center,
-		Bottom
 	}
 }
