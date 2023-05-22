@@ -104,6 +104,26 @@ namespace Ujeby.Graphics
 			DrawCell((int)p.X, (int)p.Y, border: border, fill: fill);
 		}
 
+		public void DrawCells(IEnumerable<v2i> cells,
+			v4f? border = null, v4f? fill = null)
+		{
+			if (cells == null)
+				return;
+
+			foreach (var v in cells)
+				DrawCell(v, border: border, fill: fill);
+		}
+
+		public void DrawCellsHeatPath(IEnumerable<v2i> path)
+		{
+			if (path != null)
+			{
+				var pa = path.ToArray();
+				for (var i = 0; i < pa.Length; i++)
+					DrawCell(pa[i], fill: HeatMap.GetColorForValue(i, pa.Length, .8));
+			}
+		}
+
 		public void DrawRect(int x, int y, int w, int h,
 			v4f? border = null, v4f? fill = null)
 		{

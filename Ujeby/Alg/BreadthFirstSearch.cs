@@ -16,15 +16,16 @@ namespace Ujeby.Alg
 		private readonly Func<v2i, v2i, int[,], bool> _connectionCheck;
 
 		public bool[,] Visited { get; private set; }
+		public HashSet<v2i> VisitedHashSet { get; private set; }
 
 		private Queue<v2i> _queue;
 		private v2i _p;
 
 		public v2i?[,] Prev { get; private set; }
 
-		public BreadthFirstSearch(int[,] map, v2i start, Func<v2i, v2i, int[,], bool> connectionCheck)
+		public BreadthFirstSearch(int[,] map, v2i size, v2i start, Func<v2i, v2i, int[,], bool> connectionCheck)
 		{
-			Size = new v2i(map.GetLength(1), map.GetLength(0));
+			Size = size;
 			Start = start;
 
 			_map = map;
@@ -36,6 +37,10 @@ namespace Ujeby.Alg
 			Prev = new v2i?[Size.Y, Size.X];
 
 			Visited[Start.Y, Start.X] = true;
+			VisitedHashSet = new HashSet<v2i>
+			{
+				Start
+			};
 
 			_p = Start;
 		}
@@ -58,6 +63,8 @@ namespace Ujeby.Alg
 					continue;
 
 				Visited[p1.Y, p1.X] = true;
+				VisitedHashSet.Add(p1);
+
 				_queue.Enqueue(p1);
 				Prev[p1.Y, p1.X] = _p;
 			}

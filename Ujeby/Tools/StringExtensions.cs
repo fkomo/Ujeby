@@ -105,7 +105,8 @@ namespace Ujeby.Tools.StringExtensions
 			for (var i = 0; i < s.Length; i++)
 			{
 				result += s[i];
-				if (i < s.Length - 1 && char.IsLower(s[i]) && char.IsUpper(s[i + 1]))
+				if ((i < s.Length - 1 && char.IsLower(s[i]) && char.IsUpper(s[i + 1])) 
+					|| (i < s.Length - 2 && char.IsUpper(s[i]) && char.IsUpper(s[i + 1]) && char.IsLower(s[i + 2])))
 					result += delimiter;
 			}
 

@@ -32,7 +32,7 @@ namespace Ujeby.Graphics.Sdl
 		protected double _frameTime { get; private set; }
 		protected long _frameCount { get; private set; }
 
-		protected const long _fpsUpdate = 60;
+		protected long _fpsUpdate = 60;
 
 		protected double Fps { get; private set; }
 
