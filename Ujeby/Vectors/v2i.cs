@@ -44,6 +44,22 @@
 			Up,
 		};
 
+		public readonly static v2i[] DownUpLeftRight = new[]
+		{
+			Down,
+			Up,
+			Left,
+			Right,
+		};
+
+		public readonly static v2i[] UpDownLeftRight = new[]
+		{
+			Up,
+			Down,
+			Left,
+			Right,
+		};
+
 		public readonly static v2i[] Corners = new[]
 		{
 			Right + Up,
