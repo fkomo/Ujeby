@@ -1,4 +1,6 @@
-﻿namespace Ujeby.Vectors
+﻿using Ujeby.Tools.StringExtensions;
+
+namespace Ujeby.Vectors
 {
 #pragma warning disable IDE1006 // Naming Styles
 	public struct v4i
@@ -92,6 +94,7 @@
 		public static implicit operator v2i(v4i v) => new(v.X, v.Y);
 		public static implicit operator v3i(v4i v) => new(v.X, v.Y, v.Z);
 
+		public static v4i Parse(string s) => new(s.ToNumArray());
 		public v4i Abs() => new(Math.Abs(X), Math.Abs(Y), Math.Abs(Z), Math.Abs(W));
 		public v2i ToV2i() => new(X, Y);
 		public v3i ToV3i() => new(X, Y, Z);

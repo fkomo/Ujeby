@@ -1,4 +1,6 @@
-﻿namespace Ujeby.Vectors
+﻿using Ujeby.Tools.StringExtensions;
+
+namespace Ujeby.Vectors
 {
 #pragma warning disable IDE1006 // Naming Styles
 	public struct v2i
@@ -109,6 +111,8 @@
 
 		public static bool operator ==(v2i a, v2i b) => a.X == b.X && a.Y == b.Y;
 		public static bool operator !=(v2i a, v2i b) => !(a == b);
+
+		public static v2i Parse(string s) => new(s.ToNumArray());
 
 		public long Length() => (long)Math.Sqrt(Length2());
 		public long Length2() => Math.Abs(X * X) + Math.Abs(Y * Y);

@@ -1,4 +1,6 @@
-﻿namespace Ujeby.Vectors
+﻿using Ujeby.Tools.StringExtensions;
+
+namespace Ujeby.Vectors
 {
 #pragma warning disable IDE1006 // Naming Styles
 	public struct v3i : IComparable
@@ -55,6 +57,16 @@
 			Down + Left + Front,
 		};
 
+		public readonly static v3i[] UpDownLeftRightBackFront = new[]
+{
+			Up,
+			Down,
+			Left,
+			Right,
+			Back,
+			Front
+		};
+
 		public v3i(long x, long y, long z) : this()
 		{
 			X = x;
@@ -95,17 +107,19 @@
 		public static bool operator ==(v3i a, v3i b) => a.X == b.X && a.Y == b.Y && a.Z == b.Z;
 		public static bool operator !=(v3i a, v3i b) => !(a == b);
 
-		public long Volume() => X * Y * Z;
-		public long Surface() => 2 * (X * Y + X * Z + Y * Z);
-		public long Length() => (long)Math.Sqrt(Length2());
-		public long Length2() => Math.Abs(X * X) + Math.Abs(Y * Y) + Math.Abs(Z * Z);
-		public v3i Abs() => new(Math.Abs(X), Math.Abs(Y), Math.Abs(Z));
-		public v3i Inv() => new(-X, -Y, -Z);
-		public v2i ToV2i() => new(X, Y);
-		public long[] ToArray() => new[] { X, Y, Z };
+		public static v3i Parse(string s) => new(s.ToNumArray());
+
+		public readonly long Volume() => X * Y * Z;
+		public readonly long Surface() => 2 * (X * Y + X * Z + Y * Z);
+		public readonly long Length() => (long)Math.Sqrt(Length2());
+		public readonly long Length2() => Math.Abs(X * X) + Math.Abs(Y * Y) + Math.Abs(Z * Z);
+		public readonly v3i Abs() => new(Math.Abs(X), Math.Abs(Y), Math.Abs(Z));
+		public readonly v3i Inv() => new(-X, -Y, -Z);
+		public readonly v2i ToV2i() => new(X, Y);
+		public readonly long[] ToArray() => new[] { X, Y, Z };
 
 		/// <summary>Manhattan length</summary>
-		public long ManhLength() => Math.Abs(X) + Math.Abs(Y) + Math.Abs(Z);
+		public readonly long ManhLength() => Math.Abs(X) + Math.Abs(Y) + Math.Abs(Z);
 
 		/// <summary>Manhattan distance</summary>
 		public static long ManhDistance(v3i a, v3i b) => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y) + Math.Abs(a.Z - b.Z);
@@ -116,13 +130,13 @@
 		public static v3i Clamp(v3i v, v3i min, v3i max)
 			=> new(Math.Clamp(v.X, min.X, max.X), Math.Clamp(v.Y, min.Y, max.Y), Math.Clamp(v.Z, min.Z, max.Z));
 
-		public v3i RotateCWX() => new(X, -Z, Y);
-		public v3i RotateCWY() => new(Z, Y, -X);
-		public v3i RotateCWZ() => new(Y, -X, Z);
+		public readonly v3i RotateCWX() => new(X, -Z, Y);
+		public readonly v3i RotateCWY() => new(Z, Y, -X);
+		public readonly v3i RotateCWZ() => new(Y, -X, Z);
 
-		public v3i RotateCCWX() => RotateCWX().RotateCWX().RotateCWX();
-		public v3i RotateCCWY() => RotateCWY().RotateCWY().RotateCWY();
-		public v3i RotateCCWZ() => RotateCWZ().RotateCWZ().RotateCWZ();
+		public readonly v3i RotateCCWX() => RotateCWX().RotateCWX().RotateCWX();
+		public readonly v3i RotateCCWY() => RotateCWY().RotateCWY().RotateCWY();
+		public readonly v3i RotateCCWZ() => RotateCWZ().RotateCWZ().RotateCWZ();
 
 		public int CompareTo(object obj)
 		{
