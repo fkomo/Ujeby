@@ -27,7 +27,7 @@ namespace Ujeby.Graphics
 
 			// the integer part repersents how many block to skip
 			var blockOfColor = valuePercentage / colorPercentage;
-			var blockIdx = (int)Math.Truncate(blockOfColor);
+			var blockIdx = (int)System.Math.Truncate(blockOfColor);
 
 			// remove the part represented of block 
 			var valPercResidual = valuePercentage - (blockIdx * colorPercentage);

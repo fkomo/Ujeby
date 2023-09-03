@@ -84,7 +84,7 @@ namespace Ujeby.Graphics.Entities
 
 						lineLength += (int)(charAabb.Size.X + Spacing.X + spacing.X);
 					}
-					size.X = Math.Max(lineLength, size.X);
+					size.X = System.Math.Max(lineLength, size.X);
 					size.Y += CharSize.Y + Spacing.Y + spacing.Y;
 				}
 				else if (line is EmptyLine)

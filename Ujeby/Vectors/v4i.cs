@@ -1,4 +1,5 @@
 ﻿using Ujeby.Tools.StringExtensions;
+using System;
 
 namespace Ujeby.Vectors
 {
@@ -95,12 +96,12 @@ namespace Ujeby.Vectors
 		public static implicit operator v3i(v4i v) => new(v.X, v.Y, v.Z);
 
 		public static v4i Parse(string s) => new(s.ToNumArray());
-		public v4i Abs() => new(Math.Abs(X), Math.Abs(Y), Math.Abs(Z), Math.Abs(W));
+		public v4i Abs() => new(System.Math.Abs(X), System.Math.Abs(Y), System.Math.Abs(Z), System.Math.Abs(W));
 		public v2i ToV2i() => new(X, Y);
 		public v3i ToV3i() => new(X, Y, Z);
 		public long[] ToArray() => new[] { X, Y, Z };
 
-		public static v4i Min(v4i v1, v4i v2) => new(Math.Min(v1.X, v2.X), Math.Min(v1.Y, v2.Y), Math.Min(v1.Z, v2.Z), Math.Min(v1.W, v2.W));
-		public static v4i Max(v4i v1, v4i v2) => new(Math.Max(v1.X, v2.X), Math.Max(v1.Y, v2.Y), Math.Max(v1.Z, v2.Z), Math.Max(v1.W, v2.W));
+		public static v4i Min(v4i v1, v4i v2) => new(System.Math.Min(v1.X, v2.X), System.Math.Min(v1.Y, v2.Y), System.Math.Min(v1.Z, v2.Z), System.Math.Min(v1.W, v2.W));
+		public static v4i Max(v4i v1, v4i v2) => new(System.Math.Max(v1.X, v2.X), System.Math.Max(v1.Y, v2.Y), System.Math.Max(v1.Z, v2.Z), System.Math.Max(v1.W, v2.W));
 	}
 }

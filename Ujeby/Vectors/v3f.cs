@@ -70,15 +70,15 @@
 		public static bool operator ==(v3f a, v3f b) => a.X.Eq(b.X) && a.Y.Eq(b.Y) && a.Z.Eq(b.Z);
 		public static bool operator !=(v3f a, v3f b) => !(a == b);
 
-		public v3f Abs() => new(Math.Abs(X), Math.Abs(Y), Math.Abs(Z));
+		public v3f Abs() => new(System.Math.Abs(X), System.Math.Abs(Y), System.Math.Abs(Z));
 		public v3f Inv() => new(-X, -Y, -Z);
-		public v3f Min(v3f v) => new(Math.Min(X, v.X), Math.Min(Y, v.Y), Math.Min(Z, v.Z));
-		public v3f Max(v3f v) => new(Math.Max(X, v.X), Math.Max(Y, v.Y), Math.Max(Z, v.Z));
+		public v3f Min(v3f v) => new(System.Math.Min(X, v.X), System.Math.Min(Y, v.Y), System.Math.Min(Z, v.Z));
+		public v3f Max(v3f v) => new(System.Math.Max(X, v.X), System.Math.Max(Y, v.Y), System.Math.Max(Z, v.Z));
 		public v3i ToV3i() => new((long)X, (long)Y, (long)Z);
 		public double[] ToArray() => new[] { X, Y, Z };
 
-		public static v3f Min(v3f v1, v3f v2) => new(Math.Min(v1.X, v2.X), Math.Min(v1.Y, v2.Y), Math.Min(v1.Z, v2.Z));
-		public static v3f Max(v3f v1, v3f v2) => new(Math.Max(v1.X, v2.X), Math.Max(v1.Y, v2.Y), Math.Max(v1.Z, v2.Z));
+		public static v3f Min(v3f v1, v3f v2) => new(System.Math.Min(v1.X, v2.X), System.Math.Min(v1.Y, v2.Y), System.Math.Min(v1.Z, v2.Z));
+		public static v3f Max(v3f v1, v3f v2) => new(System.Math.Max(v1.X, v2.X), System.Math.Max(v1.Y, v2.Y), System.Math.Max(v1.Z, v2.Z));
 		public static double Dot(v3f v1, v3f v2) => v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z;
 	}
 }

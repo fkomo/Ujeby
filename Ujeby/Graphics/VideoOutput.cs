@@ -19,7 +19,7 @@ namespace Ujeby.Graphics
 			for (var y = 0; y < map.Length; y++)
 				for (var x = 0; x < map[0].Length; x++)
 				{
-					var c = Math.Clamp(map[y][x] * 10, 0, 0xff);
+					var c = System.Math.Clamp(map[y][x] * 10, 0, 0xff);
 
 					Point pt = new(x * size, y * size);
 					Size sz = new(size, size);

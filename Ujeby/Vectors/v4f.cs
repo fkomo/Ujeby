@@ -74,14 +74,14 @@
 		public static bool operator ==(v4f a, v4f b) => a.X.Eq(b.X) && a.Y.Eq(b.Y) && a.Z.Eq(b.Z) && a.W.Eq(b.W);
 		public static bool operator !=(v4f a, v4f b) => !(a == b);
 
-		public v4f Abs() => new(Math.Abs(X), Math.Abs(Y), Math.Abs(Z), Math.Abs(W));
+		public v4f Abs() => new(System.Math.Abs(X), System.Math.Abs(Y), System.Math.Abs(Z), System.Math.Abs(W));
 		public v4f Inv() => new(-X, -Y, -Z, -W);
-		public v4f Min(v4f v) => new(Math.Min(X, v.X), Math.Min(Y, v.Y), Math.Min(Z, v.Z), Math.Min(W, v.W));
-		public v4f Max(v4f v) => new(Math.Max(X, v.X), Math.Max(Y, v.Y), Math.Max(Z, v.Z), Math.Max(W, v.W));
+		public v4f Min(v4f v) => new(System.Math.Min(X, v.X), System.Math.Min(Y, v.Y), System.Math.Min(Z, v.Z), System.Math.Min(W, v.W));
+		public v4f Max(v4f v) => new(System.Math.Max(X, v.X), System.Math.Max(Y, v.Y), System.Math.Max(Z, v.Z), System.Math.Max(W, v.W));
 		public double[] ToArray() => new[] { X, Y, Z, W };
 
-		public static v4f Min(v4f v1, v4f v2) => new(Math.Min(v1.X, v2.X), Math.Min(v1.Y, v2.Y), Math.Min(v1.Z, v2.Z), Math.Min(v1.W, v2.W));
-		public static v4f Max(v4f v1, v4f v2) => new(Math.Max(v1.X, v2.X), Math.Max(v1.Y, v2.Y), Math.Max(v1.Z, v2.Z), Math.Max(v1.W, v2.W));
+		public static v4f Min(v4f v1, v4f v2) => new(System.Math.Min(v1.X, v2.X), System.Math.Min(v1.Y, v2.Y), System.Math.Min(v1.Z, v2.Z), System.Math.Min(v1.W, v2.W));
+		public static v4f Max(v4f v1, v4f v2) => new(System.Math.Max(v1.X, v2.X), System.Math.Max(v1.Y, v2.Y), System.Math.Max(v1.Z, v2.Z), System.Math.Max(v1.W, v2.W));
 		public static double Dot(v4f v1, v4f v2) => v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z + v1.W * v2.W;
 	}
 }

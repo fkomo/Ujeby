@@ -68,19 +68,19 @@
 		public static bool operator ==(v2f a, v2f b) => a.X.Eq(b.X) && a.Y.Eq(b.Y);
 		public static bool operator !=(v2f a, v2f b) => !(a == b);
 
-		public double Length() => Math.Sqrt(X * X + Y * Y);
+		public double Length() => System.Math.Sqrt(X * X + Y * Y);
 		public v2f Normalize() => this * 1.0 / Length();
-		public v2f Abs() => new(Math.Abs(X), Math.Abs(Y));
+		public v2f Abs() => new(System.Math.Abs(X), System.Math.Abs(Y));
 		public v2f Inv() => new(-X, -Y);
-		public v2f Min(v2f v) => new(Math.Min(X, v.X), Math.Min(Y, v.Y));
-		public v2f Max(v2f v) => new(Math.Max(X, v.X), Math.Max(Y, v.Y));
+		public v2f Min(v2f v) => new(System.Math.Min(X, v.X), System.Math.Min(Y, v.Y));
+		public v2f Max(v2f v) => new(System.Math.Max(X, v.X), System.Math.Max(Y, v.Y));
 		public v2i Trunc() => new((long)X, (long)Y);
-		public v2i Round() => new((long)Math.Round(X), (long)Math.Round(Y));
+		public v2i Round() => new((long)System.Math.Round(X), (long)System.Math.Round(Y));
 		public v2i ToV2i() => new((long)X, (long)Y);
 		public double[] ToArray() => new[] { X, Y };
 
 		public static double Dot(v2f v1, v2f v2) => v1.X * v2.X + v1.Y * v2.Y;
-		public static v2f Min(v2f v1, v2f v2) => new(Math.Min(v1.X, v2.X), Math.Min(v1.Y, v2.Y));
-		public static v2f Max(v2f v1, v2f v2) => new(Math.Max(v1.X, v2.X), Math.Max(v1.Y, v2.Y));
+		public static v2f Min(v2f v1, v2f v2) => new(System.Math.Min(v1.X, v2.X), System.Math.Min(v1.Y, v2.Y));
+		public static v2f Max(v2f v1, v2f v2) => new(System.Math.Max(v1.X, v2.X), System.Math.Max(v1.Y, v2.Y));
 	}
 }

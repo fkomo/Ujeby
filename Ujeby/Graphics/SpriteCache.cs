@@ -82,10 +82,10 @@ namespace Ujeby.Graphics
 							var index = (int)(y * aabbSprite.Size.X + x + ci);
 							if (aabbSprite.Data[index] != 0)
 							{
-								min.X = Math.Min(min.X, x);
-								min.Y = Math.Min(min.Y, y);
-								max.X = Math.Max(max.X, x + 1);
-								max.Y = Math.Max(max.Y, y + 1);
+								min.X = System.Math.Min(min.X, x);
+								min.Y = System.Math.Min(min.Y, y);
+								max.X = System.Math.Max(max.X, x + 1);
+								max.Y = System.Math.Max(max.Y, y + 1);
 							}
 						}
 					}

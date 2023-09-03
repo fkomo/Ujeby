@@ -114,20 +114,20 @@ namespace Ujeby.Vectors
 
 		public static v2i Parse(string s) => new(s.ToNumArray());
 
-		public long Length() => (long)Math.Sqrt(Length2());
-		public long Length2() => Math.Abs(X * X) + Math.Abs(Y * Y);
+		public long Length() => (long)System.Math.Sqrt(Length2());
+		public long Length2() => System.Math.Abs(X * X) + System.Math.Abs(Y * Y);
 		public long Area() => X * Y;
-		public v2i Abs() => new(Math.Abs(X), Math.Abs(Y));
+		public v2i Abs() => new(System.Math.Abs(X), System.Math.Abs(Y));
 		public v2i Inv() => new(-X, -Y);
 		public long[] ToArray() => new[] { X, Y };
 
 		/// <summary>Manhattan length</summary>
-		public long ManhLength() => Math.Abs(X) + Math.Abs(Y);
+		public long ManhLength() => System.Math.Abs(X) + System.Math.Abs(Y);
 
 		/// <summary>Manhattan distance</summary>
-		public static long ManhDistance(v2i a, v2i b) => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
+		public static long ManhDistance(v2i a, v2i b) => System.Math.Abs(a.X - b.X) + System.Math.Abs(a.Y - b.Y);
 
-		public static v2i Min(v2i v1, v2i v2) => new(Math.Min(v1.X, v2.X), Math.Min(v1.Y, v2.Y));
-		public static v2i Max(v2i v1, v2i v2) => new(Math.Max(v1.X, v2.X), Math.Max(v1.Y, v2.Y));
+		public static v2i Min(v2i v1, v2i v2) => new(System.Math.Min(v1.X, v2.X), System.Math.Min(v1.Y, v2.Y));
+		public static v2i Max(v2i v1, v2i v2) => new(System.Math.Max(v1.X, v2.X), System.Math.Max(v1.Y, v2.Y));
 	}
 }

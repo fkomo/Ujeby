@@ -111,24 +111,24 @@ namespace Ujeby.Vectors
 
 		public readonly long Volume() => X * Y * Z;
 		public readonly long Surface() => 2 * (X * Y + X * Z + Y * Z);
-		public readonly long Length() => (long)Math.Sqrt(Length2());
-		public readonly long Length2() => Math.Abs(X * X) + Math.Abs(Y * Y) + Math.Abs(Z * Z);
-		public readonly v3i Abs() => new(Math.Abs(X), Math.Abs(Y), Math.Abs(Z));
+		public readonly long Length() => (long)System.Math.Sqrt(Length2());
+		public readonly long Length2() => System.Math.Abs(X * X) + System.Math.Abs(Y * Y) + System.Math.Abs(Z * Z);
+		public readonly v3i Abs() => new(System.Math.Abs(X), System.Math.Abs(Y), System.Math.Abs(Z));
 		public readonly v3i Inv() => new(-X, -Y, -Z);
 		public readonly v2i ToV2i() => new(X, Y);
 		public readonly long[] ToArray() => new[] { X, Y, Z };
 
 		/// <summary>Manhattan length</summary>
-		public readonly long ManhLength() => Math.Abs(X) + Math.Abs(Y) + Math.Abs(Z);
+		public readonly long ManhLength() => System.Math.Abs(X) + System.Math.Abs(Y) + System.Math.Abs(Z);
 
 		/// <summary>Manhattan distance</summary>
-		public static long ManhDistance(v3i a, v3i b) => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y) + Math.Abs(a.Z - b.Z);
+		public static long ManhDistance(v3i a, v3i b) => System.Math.Abs(a.X - b.X) + System.Math.Abs(a.Y - b.Y) + System.Math.Abs(a.Z - b.Z);
 
-		public static v3i Min(v3i v1, v3i v2) => new(Math.Min(v1.X, v2.X), Math.Min(v1.Y, v2.Y), Math.Min(v1.Z, v2.Z));
-		public static v3i Max(v3i v1, v3i v2) => new(Math.Max(v1.X, v2.X), Math.Max(v1.Y, v2.Y), Math.Max(v1.Z, v2.Z));
+		public static v3i Min(v3i v1, v3i v2) => new(System.Math.Min(v1.X, v2.X), System.Math.Min(v1.Y, v2.Y), System.Math.Min(v1.Z, v2.Z));
+		public static v3i Max(v3i v1, v3i v2) => new(System.Math.Max(v1.X, v2.X), System.Math.Max(v1.Y, v2.Y), System.Math.Max(v1.Z, v2.Z));
 
 		public static v3i Clamp(v3i v, v3i min, v3i max)
-			=> new(Math.Clamp(v.X, min.X, max.X), Math.Clamp(v.Y, min.Y, max.Y), Math.Clamp(v.Z, min.Z, max.Z));
+			=> new(System.Math.Clamp(v.X, min.X, max.X), System.Math.Clamp(v.Y, min.Y, max.Y), System.Math.Clamp(v.Z, min.Z, max.Z));
 
 		public readonly v3i RotateCWX() => new(X, -Z, Y);
 		public readonly v3i RotateCWY() => new(Z, Y, -X);
