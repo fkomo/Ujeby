@@ -16,7 +16,7 @@ namespace Ujeby.Tools.StringExtensions
 		/// <param name="openBracket"></param>
 		/// <param name="closeBracket"></param>
 		/// <returns></returns>
-		public static string[] SplitNestedArrays(this string s, 
+		public static string[] SplitNestedArrays(this string s,
 			char separator = ',', char openBracket = '[', char closeBracket = ']')
 		{
 			if (!s.Any(c => c == openBracket || c == closeBracket))
@@ -97,7 +97,7 @@ namespace Ujeby.Tools.StringExtensions
 		/// <param name="s"></param>
 		/// <param name="delimiter"></param>
 		/// <returns></returns>
-		public static string SplitCase(this string s, 
+		public static string SplitCase(this string s,
 			char delimiter = ' ')
 		{
 			var result = string.Empty;
@@ -105,7 +105,7 @@ namespace Ujeby.Tools.StringExtensions
 			for (var i = 0; i < s.Length; i++)
 			{
 				result += s[i];
-				if ((i < s.Length - 1 && char.IsLower(s[i]) && char.IsUpper(s[i + 1])) 
+				if ((i < s.Length - 1 && char.IsLower(s[i]) && char.IsUpper(s[i + 1]))
 					|| (i < s.Length - 2 && char.IsUpper(s[i]) && char.IsUpper(s[i + 1]) && char.IsLower(s[i + 2])))
 					result += delimiter;
 			}
@@ -184,7 +184,7 @@ namespace Ujeby.Tools.StringExtensions
 		/// <param name="openingBrackets"></param>
 		/// <param name="closingBrackets"></param>
 		/// <returns></returns>
-		public static int IndexOfOpeningBracket(this string s, int closingBracketIndex, 
+		public static int IndexOfOpeningBracket(this string s, int closingBracketIndex,
 			string openingBrackets = "{([", string closingBrackets = "})]")
 		{
 			var i = closingBracketIndex;
@@ -289,5 +289,41 @@ namespace Ujeby.Tools.StringExtensions
 
 			return s;
 		}
+
+		/// <summary>
+		/// returns index of last occurance of any of given characters in string
+		/// </summary>
+		/// <param name="s"></param>
+		/// <returns></returns>
+		public static int IndexOfLastOccurance(this string s, params char[] c)
+		{
+			for (var i = s.Length - 1; i >= 0; i--)
+				if (c.Contains(s[i]))
+					return i;
+
+			return -1;
+		}
+
+		/// <summary>
+		/// returns index of first occurance of any of given characters in string
+		/// </summary>
+		/// <param name="s"></param>
+		/// <returns></returns>
+		public static int IndexOfFirstOccurance(this string s, params char[] c)
+		{
+			for (var i = 0; i < s.Length; i++)
+				if (c.Contains(s[i]))
+					return i;
+
+			return -1;
+		}
+
+		/// <summary>
+		/// returns only digits from string
+		/// </summary>
+		/// <param name="s"></param>
+		/// <returns></returns>
+		public static string DigitsOnly(this string s)
+			=> s == null ? s : new(s.Where(c => char.IsDigit(c)).ToArray());
 	}
 }
