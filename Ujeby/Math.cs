@@ -60,5 +60,23 @@
         /// <param name="f"></param>
         /// <returns></returns>
         public static long Factorial(long f) => f == 0 ? 1 : f * Factorial(f - 1);
-    }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+		public static long LeastCommonMultiple(long x, long y)
+		{
+			var max = System.Math.Max(x, y);
+			var min = System.Math.Min(x, y);
+
+			for (long i = 1; i <= min; i++)
+				if (max * i % min == 0)
+					return i * max;
+
+			return min;
+		}
+	}
 }
