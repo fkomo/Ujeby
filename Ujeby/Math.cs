@@ -61,22 +61,38 @@
         /// <returns></returns>
         public static long Factorial(long f) => f == 0 ? 1 : f * Factorial(f - 1);
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <returns></returns>
+		public static long GreatestCommonDivisor(long a, long b)
+		{
+			while (b != 0)
+			{
+				var temp = b;
+				b = a % b;
+				a = temp;
+			}
+			return a;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <returns></returns>
+		public static long LeastCommonMultiple(long a, long b)
+            => a / GreatestCommonDivisor(a, b) * b;
+
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
+        /// <param name="values"></param>
         /// <returns></returns>
-		public static long LeastCommonMultiple(long x, long y)
-		{
-			var max = System.Math.Max(x, y);
-			var min = System.Math.Min(x, y);
-
-			for (long i = 1; i <= min; i++)
-				if (max * i % min == 0)
-					return i * max;
-
-			return min;
-		}
+		public static long LeastCommonMultiple(this IEnumerable<long> values)
+	        => values.Aggregate(LeastCommonMultiple);
 	}
 }
