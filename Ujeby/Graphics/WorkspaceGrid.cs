@@ -83,7 +83,7 @@ namespace Ujeby.Graphics
 
 		public void Zoom(int value)
 		{
-			MinorSize = System.Math.Max(2, MinorSize + value);
+			MinorSize = System.Math.Max(1, MinorSize + value);
 		}
 
 		public void DrawCell(int x, int y,
