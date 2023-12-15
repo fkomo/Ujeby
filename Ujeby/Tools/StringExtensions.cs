@@ -325,5 +325,19 @@ namespace Ujeby.Tools.StringExtensions
 		/// <returns></returns>
 		public static string DigitsOnly(this string s)
 			=> s == null ? s : new(s.Where(c => char.IsDigit(c)).ToArray());
+
+		/// <summary>
+		/// replaces part of string (s) at start position with another string (s2)
+		/// </summary>
+		/// <param name="s"></param>
+		/// <param name="start"></param>
+		/// <param name="s2"></param>
+		/// <returns></returns>
+		/// <exception cref="NotImplementedException"></exception>
+		public static string Replace(this string s, int start, string s2)
+		{
+			// TODO Replace
+			throw new NotImplementedException();
+		}
 	}
 }

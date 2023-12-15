@@ -62,6 +62,18 @@ namespace Ujeby.Vectors
 			Right,
 		};
 
+		public readonly static v2i[] PlusMinusOne = new[]
+		{
+			Left + Up,
+			Up,
+			Right + Up,
+			Right,
+			Right + Down,
+			Down,
+			Left + Down,
+			Left,
+		};
+
 		public readonly static v2i[] Corners = new[]
 		{
 			Right + Up,
