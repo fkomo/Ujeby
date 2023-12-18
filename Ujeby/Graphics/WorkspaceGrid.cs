@@ -171,7 +171,7 @@ namespace Ujeby.Graphics
 
 		public void DrawLine(v2i a, v2i b, v4f color)
 		{
-			Sdl2Wrapper.DrawLine((int)a.X, (int)a.Y, (int)b.X, (int)b.Y, color);
+			DrawLine((int)a.X, (int)a.Y, (int)b.X, (int)b.Y, color);
 		}
 
 		public void Draw(
