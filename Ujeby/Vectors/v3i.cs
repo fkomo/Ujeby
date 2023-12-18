@@ -86,6 +86,17 @@ namespace Ujeby.Vectors
 		{
 		}
 
+		public v3i(string rgbColorHash)
+		{
+			if (rgbColorHash.StartsWith('#'))
+				rgbColorHash = rgbColorHash[1..];
+
+			var value = int.Parse(rgbColorHash, System.Globalization.NumberStyles.HexNumber);
+			X = (value & 0xff0000) >> 16;
+			Y = (value & 0x00ff00) >> 8;
+			Z = (value & 0x0000ff) >> 0;
+		}
+
 		public v3i(v2i v2, long z) : this(v2.X, v2.Y, z)
 		{
 		}

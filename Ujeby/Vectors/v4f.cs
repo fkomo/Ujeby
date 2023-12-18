@@ -50,6 +50,10 @@
 		{
 		}
 
+		public v4f(v3f xyz, double w = 1) : this(xyz.X, xyz.Y, xyz.Z, w)
+		{
+		}
+
 		public v4f(v4f v) : this(v.X, v.Y, v.Z, v.W)
 		{
 		}

@@ -54,6 +54,17 @@
 		{
 		}
 
+		public v3f(string rgbColorHash)
+		{
+			if (rgbColorHash.StartsWith('#'))
+				rgbColorHash = rgbColorHash[1..];
+
+			var value = int.Parse(rgbColorHash, System.Globalization.NumberStyles.HexNumber);
+			X = ((value & 0xff0000) >> 16) / 255.0;
+			Y = ((value & 0x00ff00) >> 8) / 255.0;
+			Z = ((value & 0x0000ff) >> 0) / 255.0;
+		}
+
 		public override string ToString() => $"[{X:0.00};{Y:0.00};{Z:0.00}]";
 		public override bool Equals(object obj) => obj is v3f v && this == v;
 		public override int GetHashCode() => X.GetHashCode() ^ Y.GetHashCode() ^ Z.GetHashCode();
