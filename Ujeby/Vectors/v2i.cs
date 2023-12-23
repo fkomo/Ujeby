@@ -3,7 +3,7 @@
 namespace Ujeby.Vectors
 {
 #pragma warning disable IDE1006 // Naming Styles
-	public struct v2i
+	public struct v2i : IComparable<v2i>
 #pragma warning restore IDE1006 // Naming Styles
 	{
 		public long X;
@@ -141,5 +141,16 @@ namespace Ujeby.Vectors
 
 		public static v2i Min(v2i v1, v2i v2) => new(System.Math.Min(v1.X, v2.X), System.Math.Min(v1.Y, v2.Y));
 		public static v2i Max(v2i v1, v2i v2) => new(System.Math.Max(v1.X, v2.X), System.Math.Max(v1.Y, v2.Y));
+
+		public readonly int CompareTo(v2i other)
+		{
+			if (other.X < X && other.Y < Y) 
+				return 1;
+			
+			if (other.X > X && other.Y > Y)
+				return -1;
+
+			return 0;
+		}
 	}
 }

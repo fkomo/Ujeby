@@ -99,6 +99,32 @@ namespace Ujeby.Graphics.Sdl
 			DrawPixel((int)p.X, (int)p.Y, color);
 		}
 
+		public static void DrawRect(v2i p1, v2i p2,
+			v4f? border = null, v4f? fill = null)
+		{
+			var rect = new SDL.SDL_Rect
+			{
+				x = (int)v2i.Min(p1, p2).X,
+				y = (int)v2i.Min(p1, p2).Y,
+				w = (int)(p1 - p2).Abs().X,
+				h = (int)(p1 - p2).Abs().Y,
+			};
+
+			if (fill.HasValue)
+			{
+				var fColor = fill.Value * 255;
+				_ = SDL.SDL_SetRenderDrawColor(RendererPtr, (byte)fColor.X, (byte)fColor.Y, (byte)fColor.Z, (byte)fColor.W);
+				_ = SDL.SDL_RenderFillRect(RendererPtr, ref rect);
+			}
+
+			if (border.HasValue)
+			{
+				var bColor = border.Value * 255;
+				_ = SDL.SDL_SetRenderDrawColor(RendererPtr, (byte)bColor.X, (byte)bColor.Y, (byte)bColor.Z, (byte)bColor.W);
+				_ = SDL.SDL_RenderDrawRect(RendererPtr, ref rect);
+			}
+		}
+
 		public static void DrawRect(int x, int y, int w, int h,
 			v4f? border = null, v4f? fill = null)
 		{

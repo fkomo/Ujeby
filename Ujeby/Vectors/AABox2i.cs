@@ -17,6 +17,10 @@
 		public override string ToString() => $"{ Min }-{ Max }";
 		public static AABox2i operator +(AABox2i bb, v2i v) => new(bb.Min + v, bb.Max + v);
 
+		public AABox2i(v2i[] corners) : this(v2i.Min(corners[0], corners[1]), v2i.Max(corners[0], corners[1]))
+		{
+		}
+
 		public AABox2i(v2i min, v2i max)
 		{
 			Min = min;

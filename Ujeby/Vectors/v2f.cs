@@ -1,7 +1,7 @@
 ﻿namespace Ujeby.Vectors
 {
 #pragma warning disable IDE1006 // Naming Styles
-	public struct v2f
+	public struct v2f : IComparable<v2f>
 #pragma warning restore IDE1006 // Naming Styles
 	{
 		public double X;
@@ -82,5 +82,16 @@
 		public static double Dot(v2f v1, v2f v2) => v1.X * v2.X + v1.Y * v2.Y;
 		public static v2f Min(v2f v1, v2f v2) => new(System.Math.Min(v1.X, v2.X), System.Math.Min(v1.Y, v2.Y));
 		public static v2f Max(v2f v1, v2f v2) => new(System.Math.Max(v1.X, v2.X), System.Math.Max(v1.Y, v2.Y));
+
+		public int CompareTo(v2f other)
+		{
+			if (other.X < X && other.Y < Y)
+				return 1;
+
+			if (other.X > X && other.Y > Y)
+				return -1;
+
+			return 0;
+		}
 	}
 }

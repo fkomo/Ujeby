@@ -8,6 +8,10 @@
 
 		public static AABox3i Empty => new(new(long.MaxValue), new(long.MinValue));
 
+		public AABox3i(v3i[] corners) : this(v3i.Min(corners[0], corners[1]), v3i.Max(corners[0], corners[1]))
+		{
+		}
+
 		public AABox3i(v3i min, v3i max)
 		{
 			Min = min;

@@ -3,7 +3,7 @@
 namespace Ujeby.Vectors
 {
 #pragma warning disable IDE1006 // Naming Styles
-	public struct v3i : IComparable
+	public struct v3i : IComparable<v3i>
 #pragma warning restore IDE1006 // Naming Styles
 	{
 		public long X;
@@ -149,20 +149,15 @@ namespace Ujeby.Vectors
 		public readonly v3i RotateCCWY() => RotateCWY().RotateCWY().RotateCWY();
 		public readonly v3i RotateCCWZ() => RotateCWZ().RotateCWZ().RotateCWZ();
 
-		public int CompareTo(object obj)
+		public readonly int CompareTo(v3i other)
 		{
-			if (obj is v3i v2)
-			{
-				var l1 = Length2();
-				var l2 = v2.Length2();
+			var l1 = Length2();
+			var l2 = other.Length2();
 
-				if (l1 == l2)
-					return 0;
+			if (l1 == l2)
+				return 0;
 
-				return l1 < l2 ? -1 : 1;
-			}
-
-			throw new Exception($"CompareTo: {nameof(v3i)} vs {obj?.GetType().Name}");
+			return l1 < l2 ? -1 : 1;
 		}
 	}
 }

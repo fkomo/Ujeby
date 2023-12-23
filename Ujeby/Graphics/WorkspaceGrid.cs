@@ -114,6 +114,14 @@ namespace Ujeby.Graphics
 				DrawCell(v, border: border, fill: fill);
 		}
 
+		public void DrawCells(v2i[] cells,
+			int? length = null)
+		{
+			length = System.Math.Min(length ?? cells.Length, cells.Length);
+			for (var i = 0; i < length.Value; i++)
+				DrawCell(cells[i], fill: HeatMap.GetColorForValue(i, length.Value + 1, .8));
+		}
+
 		public void DrawCellsHeatPath(IEnumerable<v2i> path)
 		{
 			if (path != null)
@@ -333,5 +341,8 @@ namespace Ujeby.Graphics
 				Sdl2Wrapper.DrawText(p + MinorSize * 2, null, new Text($"[{(int)m.X};{(int)m.Y}]"));
 			}
 		}
+
+		public v2i ToWindow(v2i gp)
+			=> (gp / MinorSize) * MinorSize + (Sdl2Wrapper.WindowSize / 2) + Offset;
 	}
 }
