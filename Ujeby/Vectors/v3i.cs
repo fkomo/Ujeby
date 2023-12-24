@@ -127,6 +127,7 @@ namespace Ujeby.Vectors
 		public readonly v3i Abs() => new(System.Math.Abs(X), System.Math.Abs(Y), System.Math.Abs(Z));
 		public readonly v3i Inv() => new(-X, -Y, -Z);
 		public readonly v2i ToV2i() => new(X, Y);
+		public readonly v2f ToV2f() => new(X, Y);
 		public readonly long[] ToArray() => new[] { X, Y, Z };
 
 		/// <summary>Manhattan length</summary>
