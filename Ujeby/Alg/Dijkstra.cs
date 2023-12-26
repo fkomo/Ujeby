@@ -110,7 +110,7 @@ namespace Ujeby.Alg
 			return path.ToArray();
 		}
 
-		public static int[] ShortestPath(Dictionary<int, (int Idx, long Weight)[]> graph, int[] nodes, int source, int target)
+		public static int[] ShortestPath(Dictionary<int, (int Dest, long Weight)[]> graph, int[] nodes, int source, int target)
 		{
 			// init
 			var q = new List<int>();
@@ -137,13 +137,13 @@ namespace Ujeby.Alg
 				if (u == target)
 					break;
 
-				foreach (var (Idx, Weight) in graph[u].Where(x => !visited[x.Idx]))
+				foreach (var (Dest, Weight) in graph[u].Where(x => !visited[x.Dest]))
 				{
 					var d = dist[u] + Weight;
-					if (d < dist[Idx])
+					if (d < dist[Dest])
 					{
-						dist[Idx] = d;
-						prev[Idx] = u;
+						dist[Dest] = d;
+						prev[Dest] = u;
 					}
 				}
 			}
