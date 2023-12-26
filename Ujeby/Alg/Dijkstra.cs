@@ -109,5 +109,52 @@ namespace Ujeby.Alg
 			path.Reverse();
 			return path.ToArray();
 		}
+
+		public static int[] ShortestPath(Dictionary<int, (int Idx, long Weight)[]> graph, int[] nodes, int source, int target)
+		{
+			// init
+			var q = new List<int>();
+			var visited = new Dictionary<int, bool>();
+			var prev = new Dictionary<int, int>();
+			var dist = new Dictionary<int, long>();
+			foreach (var v in nodes)
+			{
+				visited.Add(v, false);
+				dist.Add(v, long.MaxValue);
+				prev.Add(v, -1);
+				q.Add(v);
+			}
+			dist[source] = 0;
+
+			// shortest path from source to target
+			while (q.Any())
+			{
+				var u = q.OrderBy(x => dist[x]).First();
+				q.Remove(u);
+
+				visited[u] = true;
+
+				if (u == target)
+					break;
+
+				foreach (var (Idx, Weight) in graph[u].Where(x => !visited[x.Idx]))
+				{
+					var d = dist[u] + Weight;
+					if (d < dist[Idx])
+					{
+						dist[Idx] = d;
+						prev[Idx] = u;
+					}
+				}
+			}
+
+			// path
+			var path = new List<int>() { target };
+			while (path[^1] != source)
+				path.Add(prev[path[^1]]);
+
+			path.Reverse();
+			return path.ToArray();
+		}
 	}
 }
