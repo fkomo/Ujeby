@@ -100,9 +100,9 @@ namespace Ujeby.Vectors
 		{
 		}
 
-		public override string ToString() => $"[{X};{Y}]";
-		public override bool Equals(object obj) => obj is v2i v && this == v;
-		public override int GetHashCode() => X.GetHashCode() ^ Y.GetHashCode();
+		public override readonly string ToString() => $"[{X};{Y}]";
+		public override readonly bool Equals(object obj) => obj is v2i v && this == v;
+		public override readonly int GetHashCode() => X.GetHashCode() ^ Y.GetHashCode();
 
 		public static v2i operator +(v2i a, v2i b) => new(a.X + b.X, a.Y + b.Y);
 		public static v2i operator -(v2i a, v2i b) => new(a.X - b.X, a.Y - b.Y);
@@ -126,15 +126,17 @@ namespace Ujeby.Vectors
 
 		public static v2i Parse(string s) => new(s.ToNumArray());
 
-		public long Length() => (long)System.Math.Sqrt(Length2());
-		public long Length2() => System.Math.Abs(X * X) + System.Math.Abs(Y * Y);
-		public long Area() => X * Y;
-		public v2i Abs() => new(System.Math.Abs(X), System.Math.Abs(Y));
-		public v2i Inv() => new(-X, -Y);
-		public long[] ToArray() => new[] { X, Y };
+		public readonly long Length() => (long)System.Math.Sqrt(Length2());
+		public readonly long Length2() => System.Math.Abs(X * X) + System.Math.Abs(Y * Y);
+		public readonly long Area() => X * Y;
+		public readonly v2i Abs() => new(System.Math.Abs(X), System.Math.Abs(Y));
+		public readonly v2i Inv() => new(-X, -Y);
+		public readonly long[] ToArray() => new[] { X, Y };
+
+		public readonly v2i Rotate90() => new(-Y, X);
 
 		/// <summary>Manhattan length</summary>
-		public long ManhLength() => System.Math.Abs(X) + System.Math.Abs(Y);
+		public readonly long ManhLength() => System.Math.Abs(X) + System.Math.Abs(Y);
 
 		/// <summary>Manhattan distance</summary>
 		public static long ManhDistance(v2i a, v2i b) => System.Math.Abs(a.X - b.X) + System.Math.Abs(a.Y - b.Y);
